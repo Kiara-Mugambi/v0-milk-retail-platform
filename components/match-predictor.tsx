@@ -5,8 +5,32 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Trophy, Users, Target, Shield, Calendar } from "lucide-react"
+import { Trophy, Users, Target, Shield, Calendar, Video, Star } from "lucide-react"
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend, ResponsiveContainer } from "recharts"
+import { ChartContainer } from "@/components/ui/chart"
+
+const chartConfig = {
+  goals: {
+    label: "Goals",
+    color: "#FF0000",
+  },
+  "ball-hold": {
+    label: "Ball Hold",
+    color: "#00FF00",
+  },
+  dribbling: {
+    label: "Dribbling",
+    color: "#0000FF",
+  },
+  influence: {
+    label: "Influence",
+    color: "#FFFF00",
+  },
+  rating: {
+    label: "Rating",
+    color: "#FF00FF",
+  },
+}
 
 const teams = [
   {
@@ -365,8 +389,8 @@ const teams = [
     },
     topPlayers: [
       { name: "Igor Thiago", goals: 11, assists: 2, rating: 7.6 },
-      { name: "Bryan Mbeumo", goals: 6, assists: 4, rating: 7.3 },
-      { name: "Yoane Wissa", goals: 4, assists: 3, rating: 6.9 },
+      { name: "Kevin Schade", goals: 5, assists: 3, rating: 7.1 },
+      { name: "Fabio Carvalho", goals: 4, assists: 4, rating: 7.0 },
     ],
   },
   {
@@ -493,81 +517,1407 @@ const teams = [
 
 const headToHeadRecords: Record<
   string,
-  Record<string, { wins: number; draws: number; losses: number; recentMatches: string[] }>
+  Record<
+    string,
+    {
+      wins: number
+      draws: number
+      losses: number
+      recentMatches: {
+        date: string
+        score: string
+        result: "W" | "D" | "L"
+        venue: string
+        starPlayer: string
+        highlightUrl?: string
+        keyMoments: string[]
+      }[]
+    }
+  >
 > = {
   "man-city": {
-    arsenal: { wins: 3, draws: 1, losses: 2, recentMatches: ["2-1 W", "0-0 D", "1-3 L", "4-1 W", "1-0 W", "0-1 L"] },
-    liverpool: { wins: 2, draws: 2, losses: 2, recentMatches: ["1-1 D", "1-1 D", "4-1 W", "0-1 L", "1-0 W", "0-1 L"] },
-    chelsea: { wins: 4, draws: 1, losses: 1, recentMatches: ["2-0 W", "1-1 D", "1-0 W", "4-4 D", "1-0 W", "0-1 L"] },
-    "man-utd": { wins: 5, draws: 0, losses: 1, recentMatches: ["3-0 W", "3-1 W", "6-3 W", "2-1 W", "1-2 L", "2-1 W"] },
+    arsenal: {
+      wins: 3,
+      draws: 1,
+      losses: 1,
+      recentMatches: [
+        {
+          date: "Dec 2025",
+          score: "2-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Haaland (2 goals)",
+          highlightUrl: "https://www.youtube.com/watch?v=example1",
+          keyMoments: ["Haaland 12'", "Haaland 67'", "Saka 85'"],
+        },
+        {
+          date: "Sep 2025",
+          score: "0-0",
+          result: "D",
+          venue: "Away",
+          starPlayer: "Ederson (8 saves)",
+          highlightUrl: "https://www.youtube.com/watch?v=example2",
+          keyMoments: ["Ederson save 34'", "Raya save 76'", "VAR check 88'"],
+        },
+        {
+          date: "Apr 2025",
+          score: "1-3",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Ødegaard (1G, 2A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example3",
+          keyMoments: ["Jesus 15'", "Foden 23'", "Martinelli 56'", "Saka 78'"],
+        },
+        {
+          date: "Nov 2024",
+          score: "4-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "De Bruyne (3A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example4",
+          keyMoments: ["Haaland 8'", "Álvarez 22'", "Foden 45+2'", "White 73'", "Haaland 89'"],
+        },
+        {
+          date: "Aug 2024",
+          score: "1-0",
+          result: "W",
+          venue: "Away",
+          starPlayer: "Rodri (MOTM)",
+          highlightUrl: "https://www.youtube.com/watch?v=example5",
+          keyMoments: ["Haaland 76' (pen)", "Rodri tackle 89'"],
+        },
+      ],
+    },
+    liverpool: {
+      wins: 2,
+      draws: 2,
+      losses: 1,
+      recentMatches: [
+        {
+          date: "Nov 2025",
+          score: "1-1",
+          result: "D",
+          venue: "Away",
+          starPlayer: "Salah (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example6",
+          keyMoments: ["Foden 27'", "Salah 52'", "Alisson save 83'"],
+        },
+        {
+          date: "Jul 2025",
+          score: "4-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Haaland (hat-trick)",
+          highlightUrl: "https://www.youtube.com/watch?v=example7",
+          keyMoments: ["Haaland 12'", "Haaland 23'", "Díaz 30'", "Álvarez 67'", "Haaland 78'"],
+        },
+        {
+          date: "Mar 2025",
+          score: "0-1",
+          result: "L",
+          venue: "Away",
+          starPlayer: "van Dijk (clean sheet)",
+          highlightUrl: "https://www.youtube.com/watch?v=example8",
+          keyMoments: ["Gakpo 61'", "van Dijk clearance 89'"],
+        },
+        {
+          date: "Dec 2024",
+          score: "1-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Foden (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example9",
+          keyMoments: ["Foden 73'", "Ederson save 90+4'"],
+        },
+        {
+          date: "Oct 2024",
+          score: "1-1",
+          result: "D",
+          venue: "Away",
+          starPlayer: "De Bruyne (1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example10",
+          keyMoments: ["Núñez 45'", "Haaland 68'"],
+        },
+      ],
+    },
+    chelsea: {
+      wins: 4,
+      draws: 0,
+      losses: 1,
+      recentMatches: [
+        {
+          date: "Oct 2025",
+          score: "2-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Haaland (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example11",
+          keyMoments: ["Haaland 12'", "Foden 45+1'", "Ederson save 67'"],
+        },
+        {
+          date: "Jun 2025",
+          score: "1-0",
+          result: "W",
+          venue: "Away",
+          starPlayer: "Rodri (MOTM)",
+          highlightUrl: "https://www.youtube.com/watch?v=example12",
+          keyMoments: ["Álvarez 34'", "Rodri interception 78'"],
+        },
+        {
+          date: "Feb 2025",
+          score: "1-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "De Bruyne (1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example13",
+          keyMoments: ["Haaland 70'", "Akanji block 88'"],
+        },
+        {
+          date: "Nov 2024",
+          score: "0-1",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Palmer (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example14",
+          keyMoments: ["Palmer 63' (pen)", "Silva red card 78'"],
+        },
+        {
+          date: "Aug 2024",
+          score: "3-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Haaland (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example15",
+          keyMoments: ["Haaland 18'", "Jackson 29'", "Álvarez 56'", "Haaland 72'"],
+        },
+      ],
+    },
+    "man-utd": {
+      wins: 4,
+      draws: 0,
+      losses: 1,
+      recentMatches: [
+        {
+          date: "Sep 2025",
+          score: "3-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Haaland (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example16",
+          keyMoments: ["Foden 8'", "Haaland 34'", "Haaland 67'"],
+        },
+        {
+          date: "May 2025",
+          score: "3-1",
+          result: "W",
+          venue: "Away",
+          starPlayer: "De Bruyne (2A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example17",
+          keyMoments: ["Rashford 23'", "Haaland 45'", "Álvarez 67'", "Foden 78'"],
+        },
+        {
+          date: "Jan 2025",
+          score: "6-3",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Haaland (hat-trick)",
+          highlightUrl: "https://www.youtube.com/watch?v=example18",
+          keyMoments: [
+            "Martial 8'",
+            "Foden 12'",
+            "Haaland 23', 34', 67'",
+            "Fernandes 45+1', 78'",
+            "Álvarez 56'",
+            "Grealish 89'",
+          ],
+        },
+        {
+          date: "Oct 2024",
+          score: "1-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Rashford (2G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example19",
+          keyMoments: ["Rashford 23'", "Grealish 56'", "Rashford 82'"],
+        },
+        {
+          date: "Jul 2024",
+          score: "2-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Foden (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example20",
+          keyMoments: ["Haaland 12' (pen)", "Höjlund 34'", "Álvarez 67'"],
+        },
+      ],
+    },
   },
   arsenal: {
-    "man-city": { wins: 2, draws: 1, losses: 3, recentMatches: ["3-1 W", "0-0 D", "1-2 L", "1-4 L", "1-0 W", "0-1 L"] },
-    liverpool: { wins: 2, draws: 2, losses: 2, recentMatches: ["2-2 D", "1-1 D", "3-1 W", "2-2 D", "0-2 L", "2-0 W"] },
-    chelsea: { wins: 3, draws: 2, losses: 1, recentMatches: ["5-0 W", "2-2 D", "1-3 L", "3-1 W", "2-2 D", "2-0 W"] },
+    "man-city": {
+      wins: 1,
+      draws: 1,
+      losses: 3,
+      recentMatches: [
+        {
+          date: "Dec 2025",
+          score: "1-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Haaland (2 goals)",
+          highlightUrl: "https://www.youtube.com/watch?v=example21",
+          keyMoments: ["Haaland 12'", "Haaland 67'", "Saka 85'"],
+        },
+        {
+          date: "Sep 2025",
+          score: "0-0",
+          result: "D",
+          venue: "Home",
+          starPlayer: "Raya (7 saves)",
+          highlightUrl: "https://www.youtube.com/watch?v=example22",
+          keyMoments: ["Ederson save 34'", "Raya save 76'", "VAR check 88'"],
+        },
+        {
+          date: "Apr 2025",
+          score: "3-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Ødegaard (1G, 2A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example23",
+          keyMoments: ["Jesus 15'", "Foden 23'", "Martinelli 56'", "Saka 78'"],
+        },
+        {
+          date: "Nov 2024",
+          score: "1-4",
+          result: "L",
+          venue: "Away",
+          starPlayer: "De Bruyne (3A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example24",
+          keyMoments: ["Haaland 8'", "Álvarez 22'", "Foden 45+2'", "White 73'", "Haaland 89'"],
+        },
+        {
+          date: "Aug 2024",
+          score: "0-1",
+          result: "L",
+          venue: "Home",
+          starPlayer: "Rodri (MOTM)",
+          highlightUrl: "https://www.youtube.com/watch?v=example25",
+          keyMoments: ["Haaland 76' (pen)", "Rodri tackle 89'"],
+        },
+      ],
+    },
+    liverpool: {
+      wins: 2,
+      draws: 2,
+      losses: 1,
+      recentMatches: [
+        {
+          date: "Oct 2025",
+          score: "2-2",
+          result: "D",
+          venue: "Home",
+          starPlayer: "Salah (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example26",
+          keyMoments: ["Saka 12'", "Salah 34'", "Martinelli 67'", "Núñez 78'"],
+        },
+        {
+          date: "Jun 2025",
+          score: "1-1",
+          result: "D",
+          venue: "Away",
+          starPlayer: "Ødegaard (1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example27",
+          keyMoments: ["Jesus 23'", "Martinelli 67'", "Raya save 89'"],
+        },
+        {
+          date: "Feb 2025",
+          score: "3-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Jesus (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example28",
+          keyMoments: ["Jesus 12', 56'", "Jota 34'", "Martinelli 78'"],
+        },
+        {
+          date: "Dec 2024",
+          score: "0-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Salah (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example29",
+          keyMoments: ["Salah 45+1'", "Gakpo 67'"],
+        },
+        {
+          date: "Sep 2024",
+          score: "2-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Saka (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example30",
+          keyMoments: ["Saka 23'", "Martinelli 67'"],
+        },
+      ],
+    },
+    chelsea: {
+      wins: 3,
+      draws: 2,
+      losses: 0,
+      recentMatches: [
+        {
+          date: "Nov 2025",
+          score: "5-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Saka (2G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example31",
+          keyMoments: ["Saka 12', 45+2'", "Havertz 34'", "Jesus 67'", "Ødegaard 89'"],
+        },
+        {
+          date: "Aug 2025",
+          score: "2-2",
+          result: "D",
+          venue: "Away",
+          starPlayer: "Palmer (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example32",
+          keyMoments: ["Palmer 12'", "Saka 23'", "Martinelli 67'", "Jackson 78'"],
+        },
+        {
+          date: "Apr 2025",
+          score: "3-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Jesus (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example33",
+          keyMoments: ["Jesus 12', 67'", "Palmer 34' (pen)", "Martinelli 89'"],
+        },
+        {
+          date: "Jan 2025",
+          score: "2-2",
+          result: "D",
+          venue: "Away",
+          starPlayer: "Havertz (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example34",
+          keyMoments: ["Havertz 23'", "Jackson 34'", "Saka 56'", "Palmer 78'"],
+        },
+        {
+          date: "Oct 2024",
+          score: "2-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Ødegaard (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example35",
+          keyMoments: ["Ødegaard 23'", "Martinelli 67'"],
+        },
+      ],
+    },
     "aston-villa": {
       wins: 2,
       draws: 1,
-      losses: 3,
-      recentMatches: ["1-2 L", "2-4 L", "5-0 W", "0-0 D", "1-0 W", "0-1 L"],
+      losses: 2,
+      recentMatches: [
+        {
+          date: "Dec 2025",
+          score: "1-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Watkins (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example36",
+          keyMoments: ["Jesus 23'", "Watkins 45', 78'"],
+        },
+        {
+          date: "Aug 2025",
+          score: "5-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Saka (1G, 2A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example37",
+          keyMoments: ["Havertz 8'", "Saka 23'", "Jesus 45+1'", "Martinelli 67', 89'"],
+        },
+        {
+          date: "May 2025",
+          score: "0-0",
+          result: "D",
+          venue: "Away",
+          starPlayer: "Raya (6 saves)",
+          highlightUrl: "https://www.youtube.com/watch?v=example38",
+          keyMoments: ["Raya save 34', 67'", "Martinez save 78'"],
+        },
+        {
+          date: "Feb 2025",
+          score: "1-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Ødegaard (1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example39",
+          keyMoments: ["Jesus 67'", "Gabriel clearance 89'"],
+        },
+        {
+          date: "Nov 2024",
+          score: "0-1",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Watkins (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example40",
+          keyMoments: ["Watkins 56'", "Martinez save 90+4'"],
+        },
+      ],
     },
   },
   liverpool: {
-    "man-city": { wins: 2, draws: 2, losses: 2, recentMatches: ["1-1 D", "1-1 D", "1-4 L", "1-0 W", "0-1 L", "1-0 W"] },
-    arsenal: { wins: 2, draws: 2, losses: 2, recentMatches: ["2-2 D", "1-1 D", "1-3 L", "2-2 D", "2-0 W", "0-2 L"] },
-    chelsea: { wins: 3, draws: 2, losses: 1, recentMatches: ["4-1 W", "0-0 D", "2-1 W", "1-2 L", "0-0 D", "2-0 W"] },
-    "man-utd": { wins: 4, draws: 1, losses: 1, recentMatches: ["3-0 W", "0-0 D", "7-0 W", "2-1 W", "0-1 L", "2-1 W"] },
+    "man-city": {
+      wins: 1,
+      draws: 2,
+      losses: 2,
+      recentMatches: [
+        {
+          date: "Nov 2025",
+          score: "1-1",
+          result: "D",
+          venue: "Home",
+          starPlayer: "Salah (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example41",
+          keyMoments: ["Foden 27'", "Salah 52'", "Alisson save 83'"],
+        },
+        {
+          date: "Jul 2025",
+          score: "1-4",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Haaland (hat-trick)",
+          highlightUrl: "https://www.youtube.com/watch?v=example42",
+          keyMoments: ["Haaland 12'", "Haaland 23'", "Díaz 30'", "Álvarez 67'", "Haaland 78'"],
+        },
+        {
+          date: "Mar 2025",
+          score: "1-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "van Dijk (clean sheet)",
+          highlightUrl: "https://www.youtube.com/watch?v=example43",
+          keyMoments: ["Gakpo 61'", "van Dijk clearance 89'"],
+        },
+        {
+          date: "Dec 2024",
+          score: "0-1",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Foden (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example44",
+          keyMoments: ["Foden 73'", "Ederson save 90+4'"],
+        },
+        {
+          date: "Oct 2024",
+          score: "1-1",
+          result: "D",
+          venue: "Home",
+          starPlayer: "De Bruyne (1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example45",
+          keyMoments: ["Núñez 45'", "Haaland 68'"],
+        },
+      ],
+    },
+    arsenal: {
+      wins: 1,
+      draws: 2,
+      losses: 2,
+      recentMatches: [
+        {
+          date: "Oct 2025",
+          score: "2-2",
+          result: "D",
+          venue: "Away",
+          starPlayer: "Salah (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example46",
+          keyMoments: ["Saka 12'", "Salah 34'", "Martinelli 67'", "Núñez 78'"],
+        },
+        {
+          date: "Jun 2025",
+          score: "1-1",
+          result: "D",
+          venue: "Home",
+          starPlayer: "Díaz (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example47",
+          keyMoments: ["Jesus 23'", "Díaz 67'", "Alisson save 89'"],
+        },
+        {
+          date: "Feb 2025",
+          score: "1-3",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Jesus (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example48",
+          keyMoments: ["Jesus 12', 56'", "Jota 34'", "Martinelli 78'"],
+        },
+        {
+          date: "Dec 2024",
+          score: "2-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Salah (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example49",
+          keyMoments: ["Salah 45+1'", "Gakpo 67'"],
+        },
+        {
+          date: "Sep 2024",
+          score: "0-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Saka (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example50",
+          keyMoments: ["Saka 23'", "Martinelli 67'"],
+        },
+      ],
+    },
+    chelsea: {
+      wins: 3,
+      draws: 1,
+      losses: 1,
+      recentMatches: [
+        {
+          date: "Sep 2025",
+          score: "4-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Salah (2G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example51",
+          keyMoments: ["Salah 12', 67'", "Jackson 23'", "Gakpo 45+1'", "Núñez 78'"],
+        },
+        {
+          date: "Jun 2025",
+          score: "0-0",
+          result: "D",
+          venue: "Away",
+          starPlayer: "Alisson (9 saves)",
+          highlightUrl: "https://www.youtube.com/watch?v=example52",
+          keyMoments: ["Alisson save 34', 56', 78'", "Sánchez save 67'"],
+        },
+        {
+          date: "Mar 2025",
+          score: "2-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Jota (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example53",
+          keyMoments: ["Palmer 23' (pen)", "Jota 56', 78'"],
+        },
+        {
+          date: "Jan 2025",
+          score: "1-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Palmer (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example54",
+          keyMoments: ["Palmer 12'", "Díaz 34'", "Jackson 67'"],
+        },
+        {
+          date: "Oct 2024",
+          score: "2-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Salah (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example55",
+          keyMoments: ["Salah 23'", "Gakpo 67'"],
+        },
+      ],
+    },
+    "man-utd": {
+      wins: 4,
+      draws: 0,
+      losses: 1,
+      recentMatches: [
+        {
+          date: "Oct 2025",
+          score: "3-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Salah (1G, 2A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example56",
+          keyMoments: ["Díaz 12'", "Salah 34'", "Núñez 67'"],
+        },
+        {
+          date: "Jul 2025",
+          score: "7-0",
+          result: "W",
+          venue: "Away",
+          starPlayer: "Núñez (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example57",
+          keyMoments: ["Gakpo 12', 45+2'", "Núñez 23', 67'", "Salah 34', 78'", "Firmino 89'"],
+        },
+        {
+          date: "Mar 2025",
+          score: "2-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Salah (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example58",
+          keyMoments: ["Rashford 23'", "Jota 56'", "Salah 78'"],
+        },
+        {
+          date: "Dec 2024",
+          score: "0-1",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Rashford (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example59",
+          keyMoments: ["Rashford 82'", "de Gea save 90+3'"],
+        },
+        {
+          date: "Sep 2024",
+          score: "2-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Jota (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example60",
+          keyMoments: ["Fernandes 12' (pen)", "Jota 45', 78'"],
+        },
+      ],
+    },
   },
   chelsea: {
-    "man-city": { wins: 1, draws: 1, losses: 4, recentMatches: ["0-2 L", "1-1 D", "0-1 L", "4-4 D", "0-1 L", "1-0 W"] },
-    arsenal: { wins: 1, draws: 2, losses: 3, recentMatches: ["0-5 L", "2-2 D", "3-1 W", "1-3 L", "2-2 D", "0-2 L"] },
-    liverpool: { wins: 1, draws: 2, losses: 3, recentMatches: ["1-4 L", "0-0 D", "1-2 L", "2-1 W", "0-0 D", "0-2 L"] },
-    tottenham: { wins: 2, draws: 2, losses: 2, recentMatches: ["4-1 W", "2-2 D", "1-1 D", "0-2 L", "2-0 W", "1-3 L"] },
+    "man-city": {
+      wins: 1,
+      draws: 0,
+      losses: 4,
+      recentMatches: [
+        {
+          date: "Oct 2025",
+          score: "0-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Haaland (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example61",
+          keyMoments: ["Haaland 12'", "Foden 45+1'", "Sánchez save 67'"],
+        },
+        {
+          date: "Jun 2025",
+          score: "0-1",
+          result: "L",
+          venue: "Home",
+          starPlayer: "Rodri (MOTM)",
+          highlightUrl: "https://www.youtube.com/watch?v=example62",
+          keyMoments: ["Álvarez 34'", "Rodri interception 78'"],
+        },
+        {
+          date: "Feb 2025",
+          score: "0-1",
+          result: "L",
+          venue: "Away",
+          starPlayer: "De Bruyne (1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example63",
+          keyMoments: ["Haaland 70'", "Akanji block 88'"],
+        },
+        {
+          date: "Nov 2024",
+          score: "1-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Palmer (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example64",
+          keyMoments: ["Palmer 63' (pen)", "Silva red card 78'"],
+        },
+        {
+          date: "Aug 2024",
+          score: "1-3",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Haaland (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example65",
+          keyMoments: ["Haaland 18'", "Jackson 29'", "Álvarez 56'", "Haaland 72'"],
+        },
+      ],
+    },
+    arsenal: {
+      wins: 0,
+      draws: 2,
+      losses: 3,
+      recentMatches: [
+        {
+          date: "Nov 2025",
+          score: "0-5",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Saka (2G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example66",
+          keyMoments: ["Saka 12', 45+2'", "Havertz 34'", "Jesus 67'", "Ødegaard 89'"],
+        },
+        {
+          date: "Aug 2025",
+          score: "2-2",
+          result: "D",
+          venue: "Home",
+          starPlayer: "Palmer (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example67",
+          keyMoments: ["Palmer 12'", "Saka 23'", "Martinelli 67'", "Jackson 78'"],
+        },
+        {
+          date: "Apr 2025",
+          score: "1-3",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Jesus (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example68",
+          keyMoments: ["Jesus 12', 67'", "Palmer 34' (pen)", "Martinelli 89'"],
+        },
+        {
+          date: "Jan 2025",
+          score: "2-2",
+          result: "D",
+          venue: "Home",
+          starPlayer: "Palmer (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example69",
+          keyMoments: ["Havertz 23'", "Jackson 34'", "Saka 56'", "Palmer 78'"],
+        },
+        {
+          date: "Oct 2024",
+          score: "0-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Ødegaard (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example70",
+          keyMoments: ["Ødegaard 23'", "Martinelli 67'"],
+        },
+      ],
+    },
+    liverpool: {
+      wins: 1,
+      draws: 1,
+      losses: 3,
+      recentMatches: [
+        {
+          date: "Sep 2025",
+          score: "1-4",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Salah (2G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example71",
+          keyMoments: ["Jackson 23'", "Salah 12', 67'", "Gakpo 45+1'", "Núñez 78'"],
+        },
+        {
+          date: "Jun 2025",
+          score: "0-0",
+          result: "D",
+          venue: "Home",
+          starPlayer: "Sánchez (8 saves)",
+          highlightUrl: "https://www.youtube.com/watch?v=example72",
+          keyMoments: ["Alisson save 34', 56', 78'", "Sánchez save 67'"],
+        },
+        {
+          date: "Mar 2025",
+          score: "1-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Jota (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example73",
+          keyMoments: ["Palmer 23' (pen)", "Jota 56', 78'"],
+        },
+        {
+          date: "Jan 2025",
+          score: "2-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Palmer (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example74",
+          keyMoments: ["Palmer 12'", "Díaz 34'", "Jackson 67'"],
+        },
+        {
+          date: "Oct 2024",
+          score: "0-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Salah (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example75",
+          keyMoments: ["Salah 23'", "Gakpo 67'"],
+        },
+      ],
+    },
+    tottenham: {
+      wins: 2,
+      draws: 1,
+      losses: 2,
+      recentMatches: [
+        {
+          date: "Nov 2025",
+          score: "4-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Palmer (2G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example76",
+          keyMoments: ["Palmer 12', 56'", "Son 23'", "Jackson 45+1'", "Madueke 78'"],
+        },
+        {
+          date: "Aug 2025",
+          score: "2-2",
+          result: "D",
+          venue: "Away",
+          starPlayer: "Son (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example77",
+          keyMoments: ["Palmer 12'", "Son 34'", "Jackson 67'", "Richarlison 89'"],
+        },
+        {
+          date: "Apr 2025",
+          score: "0-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Son (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example78",
+          keyMoments: ["Son 34'", "Richarlison 78'"],
+        },
+        {
+          date: "Jan 2025",
+          score: "2-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Palmer (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example79",
+          keyMoments: ["Palmer 23'", "Jackson 67'"],
+        },
+        {
+          date: "Oct 2024",
+          score: "1-3",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Kane (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example80",
+          keyMoments: ["Kane 12', 78'", "Sterling 45'", "Son 89'"],
+        },
+      ],
+    },
   },
   "man-utd": {
-    "man-city": { wins: 1, draws: 0, losses: 5, recentMatches: ["0-3 L", "1-3 L", "3-6 L", "1-2 L", "2-1 W", "1-2 L"] },
-    liverpool: { wins: 1, draws: 1, losses: 4, recentMatches: ["0-3 L", "0-0 D", "0-7 L", "1-2 L", "1-0 W", "1-2 L"] },
-    chelsea: { wins: 2, draws: 1, losses: 3, recentMatches: ["1-1 D", "2-1 W", "1-4 L", "2-1 W", "1-3 L", "0-1 L"] },
+    "man-city": {
+      wins: 1,
+      draws: 0,
+      losses: 4,
+      recentMatches: [
+        {
+          date: "Sep 2025",
+          score: "0-3",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Haaland (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example81",
+          keyMoments: ["Foden 8'", "Haaland 34'", "Haaland 67'"],
+        },
+        {
+          date: "May 2025",
+          score: "1-3",
+          result: "L",
+          venue: "Home",
+          starPlayer: "De Bruyne (2A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example82",
+          keyMoments: ["Rashford 23'", "Haaland 45'", "Álvarez 67'", "Foden 78'"],
+        },
+        {
+          date: "Jan 2025",
+          score: "3-6",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Haaland (hat-trick)",
+          highlightUrl: "https://www.youtube.com/watch?v=example83",
+          keyMoments: [
+            "Martial 8'",
+            "Foden 12'",
+            "Haaland 23', 34', 67'",
+            "Fernandes 45+1', 78'",
+            "Álvarez 56'",
+            "Grealish 89'",
+          ],
+        },
+        {
+          date: "Oct 2024",
+          score: "2-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Rashford (2G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example84",
+          keyMoments: ["Rashford 23'", "Grealish 56'", "Rashford 82'"],
+        },
+        {
+          date: "Jul 2024",
+          score: "1-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Foden (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example85",
+          keyMoments: ["Haaland 12' (pen)", "Höjlund 34'", "Álvarez 67'"],
+        },
+      ],
+    },
+    liverpool: {
+      wins: 1,
+      draws: 0,
+      losses: 4,
+      recentMatches: [
+        {
+          date: "Oct 2025",
+          score: "0-3",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Salah (1G, 2A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example86",
+          keyMoments: ["Díaz 12'", "Salah 34'", "Núñez 67'"],
+        },
+        {
+          date: "Jul 2025",
+          score: "0-7",
+          result: "L",
+          venue: "Home",
+          starPlayer: "Núñez (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example87",
+          keyMoments: ["Gakpo 12', 45+2'", "Núñez 23', 67'", "Salah 34', 78'", "Firmino 89'"],
+        },
+        {
+          date: "Mar 2025",
+          score: "1-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Salah (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example88",
+          keyMoments: ["Rashford 23'", "Jota 56'", "Salah 78'"],
+        },
+        {
+          date: "Dec 2024",
+          score: "1-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Rashford (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example89",
+          keyMoments: ["Rashford 82'", "de Gea save 90+3'"],
+        },
+        {
+          date: "Sep 2024",
+          score: "1-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Jota (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example90",
+          keyMoments: ["Fernandes 12' (pen)", "Jota 45', 78'"],
+        },
+      ],
+    },
+    chelsea: {
+      wins: 2,
+      draws: 0,
+      losses: 3,
+      recentMatches: [
+        {
+          date: "Dec 2025",
+          score: "2-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Fernandes (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example91",
+          keyMoments: ["Fernandes 23'", "Palmer 45' (pen)", "Rashford 78'"],
+        },
+        {
+          date: "Sep 2025",
+          score: "1-4",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Palmer (hat-trick)",
+          highlightUrl: "https://www.youtube.com/watch?v=example92",
+          keyMoments: ["Höjlund 12'", "Palmer 23', 56', 78'", "Jackson 89'"],
+        },
+        {
+          date: "May 2025",
+          score: "2-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Rashford (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example93",
+          keyMoments: ["Rashford 34'", "Sterling 56'", "Fernandes 78' (pen)"],
+        },
+        {
+          date: "Feb 2025",
+          score: "1-3",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Jackson (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example94",
+          keyMoments: ["Jackson 12', 67'", "Fernandes 45' (pen)", "Palmer 78'"],
+        },
+        {
+          date: "Nov 2024",
+          score: "0-1",
+          result: "L",
+          venue: "Home",
+          starPlayer: "Enzo (MOTM)",
+          highlightUrl: "https://www.youtube.com/watch?v=example95",
+          keyMoments: ["Sterling 67'", "Casemiro red card 78'"],
+        },
+      ],
+    },
     bournemouth: {
       wins: 3,
-      draws: 2,
+      draws: 1,
       losses: 1,
-      recentMatches: ["4-4 D", "3-0 W", "1-0 W", "0-3 L", "2-2 D", "2-0 W"],
+      recentMatches: [
+        {
+          date: "Nov 2025",
+          score: "2-2",
+          result: "D",
+          venue: "Away",
+          starPlayer: "Solanke (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example96",
+          keyMoments: ["Rashford 12'", "Solanke 23', 78'", "Höjlund 67'"],
+        },
+        {
+          date: "Jul 2025",
+          score: "3-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Rashford (1G, 2A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example97",
+          keyMoments: ["Rashford 12'", "Höjlund 45'", "Fernandes 78' (pen)"],
+        },
+        {
+          date: "Apr 2025",
+          score: "1-0",
+          result: "W",
+          venue: "Away",
+          starPlayer: "Fernandes (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example98",
+          keyMoments: ["Fernandes 67' (pen)", "de Gea save 89'"],
+        },
+        {
+          date: "Jan 2025",
+          score: "0-3",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Solanke (hat-trick)",
+          highlightUrl: "https://www.youtube.com/watch?v=example99",
+          keyMoments: ["Solanke 23', 56', 78'"],
+        },
+        {
+          date: "Oct 2024",
+          score: "2-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Martial (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example100",
+          keyMoments: ["Martial 34'", "Rashford 67'"],
+        },
+      ],
     },
   },
   tottenham: {
-    chelsea: { wins: 2, draws: 2, losses: 2, recentMatches: ["1-4 L", "2-2 D", "1-1 D", "2-0 W", "0-2 L", "3-1 W"] },
+    chelsea: {
+      wins: 2,
+      draws: 1,
+      losses: 2,
+      recentMatches: [
+        {
+          date: "Nov 2025",
+          score: "1-4",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Palmer (2G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example101",
+          keyMoments: ["Palmer 12', 56'", "Son 23'", "Jackson 45+1'", "Madueke 78'"],
+        },
+        {
+          date: "Aug 2025",
+          score: "2-2",
+          result: "D",
+          venue: "Home",
+          starPlayer: "Son (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example102",
+          keyMoments: ["Palmer 12'", "Son 34'", "Jackson 67'", "Richarlison 89'"],
+        },
+        {
+          date: "Apr 2025",
+          score: "2-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Son (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example103",
+          keyMoments: ["Son 34'", "Richarlison 78'"],
+        },
+        {
+          date: "Jan 2025",
+          score: "0-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Palmer (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example104",
+          keyMoments: ["Palmer 23'", "Jackson 67'"],
+        },
+        {
+          date: "Oct 2024",
+          score: "3-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Kane (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example105",
+          keyMoments: ["Kane 12', 78'", "Sterling 45'", "Son 89'"],
+        },
+      ],
+    },
     "crystal-palace": {
-      wins: 4,
+      wins: 3,
       draws: 1,
       losses: 1,
-      recentMatches: ["3-0 W", "1-0 W", "4-1 W", "0-3 L", "1-1 D", "2-1 W"],
+      recentMatches: [
+        {
+          date: "Oct 2025",
+          score: "2-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Son (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example106",
+          keyMoments: ["Mateta 12'", "Son 34'", "Richarlison 78'"],
+        },
+        {
+          date: "Jun 2025",
+          score: "1-1",
+          result: "D",
+          venue: "Away",
+          starPlayer: "Eze (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example107",
+          keyMoments: ["Eze 23'", "Son 67'"],
+        },
+        {
+          date: "Mar 2025",
+          score: "3-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Kane (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example108",
+          keyMoments: ["Kane 12', 67'", "Olise 34'", "Son 78'"],
+        },
+        {
+          date: "Dec 2024",
+          score: "0-1",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Mateta (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example109",
+          keyMoments: ["Mateta 78'", "Guaita save 90+3'"],
+        },
+        {
+          date: "Sep 2024",
+          score: "2-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Son (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example110",
+          keyMoments: ["Son 23'", "Richarlison 67'"],
+        },
+      ],
     },
-    arsenal: { wins: 1, draws: 2, losses: 3, recentMatches: ["2-3 L", "2-2 D", "0-2 L", "3-3 D", "2-0 W", "1-3 L"] },
-    liverpool: { wins: 2, draws: 1, losses: 3, recentMatches: ["1-4 L", "2-1 W", "3-6 L", "1-1 D", "2-1 W", "1-3 L"] },
   },
   "aston-villa": {
-    arsenal: { wins: 3, draws: 1, losses: 2, recentMatches: ["2-1 W", "4-2 W", "0-5 L", "0-0 D", "0-1 L", "1-0 W"] },
-    "man-city": { wins: 1, draws: 1, losses: 4, recentMatches: ["1-2 L", "1-1 D", "0-3 L", "1-0 W", "1-4 L", "0-2 L"] },
-    chelsea: { wins: 2, draws: 2, losses: 2, recentMatches: ["2-2 D", "1-0 W", "0-3 L", "1-1 D", "2-0 W", "0-1 L"] },
-    newcastle: { wins: 2, draws: 2, losses: 2, recentMatches: ["1-3 L", "3-0 W", "1-1 D", "2-1 W", "1-1 D", "0-2 L"] },
+    arsenal: {
+      wins: 3,
+      draws: 1,
+      losses: 2,
+      recentMatches: [
+        {
+          date: "Dec 2025",
+          score: "2-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Watkins (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example111",
+          keyMoments: ["Jesus 23'", "Watkins 45', 78'"],
+        },
+        {
+          date: "Aug 2025",
+          score: "5-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Saka (1G, 2A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example112",
+          keyMoments: ["Havertz 8'", "Saka 23'", "Jesus 45+1'", "Martinelli 67', 89'"],
+        },
+        {
+          date: "May 2025",
+          score: "0-0",
+          result: "D",
+          venue: "Away",
+          starPlayer: "Raya (6 saves)",
+          highlightUrl: "https://www.youtube.com/watch?v=example113",
+          keyMoments: ["Raya save 34', 67'", "Martinez save 78'"],
+        },
+        {
+          date: "Feb 2025",
+          score: "1-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Ødegaard (1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example114",
+          keyMoments: ["Jesus 67'", "Gabriel clearance 89'"],
+        },
+        {
+          date: "Nov 2024",
+          score: "0-1",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Watkins (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example115",
+          keyMoments: ["Watkins 56'", "Martinez save 90+4'"],
+        },
+      ],
+    },
   },
   brighton: {
-    "man-city": { wins: 1, draws: 1, losses: 4, recentMatches: ["1-2 L", "1-4 L", "1-1 D", "3-2 W", "0-3 L", "1-2 L"] },
-    chelsea: { wins: 2, draws: 1, losses: 3, recentMatches: ["2-1 W", "1-2 L", "1-1 D", "1-3 L", "4-1 W", "0-1 L"] },
-    tottenham: { wins: 2, draws: 2, losses: 2, recentMatches: ["3-2 W", "1-1 D", "0-2 L", "4-2 W", "2-2 D", "1-3 L"] },
-    liverpool: { wins: 1, draws: 2, losses: 3, recentMatches: ["2-2 D", "0-3 L", "3-0 W", "1-1 D", "1-2 L", "0-2 L"] },
+    "man-city": {
+      wins: 1,
+      draws: 1,
+      losses: 4,
+      recentMatches: [
+        {
+          date: "Dec 2025",
+          score: "1-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Haaland (2 goals)",
+          highlightUrl: "https://www.youtube.com/watch?v=example116",
+          keyMoments: ["Haaland 12'", "Haaland 67'", "Saka 85'"],
+        },
+        {
+          date: "Sep 2025",
+          score: "0-0",
+          result: "D",
+          venue: "Home",
+          starPlayer: "Ederson (8 saves)",
+          highlightUrl: "https://www.youtube.com/watch?v=example117",
+          keyMoments: ["Ederson save 34'", "Raya save 76'", "VAR check 88'"],
+        },
+        {
+          date: "Apr 2025",
+          score: "1-3",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Ødegaard (1G, 2A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example118",
+          keyMoments: ["Jesus 15'", "Foden 23'", "Martinelli 56'", "Saka 78'"],
+        },
+        {
+          date: "Nov 2024",
+          score: "4-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "De Bruyne (3A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example119",
+          keyMoments: ["Haaland 8'", "Álvarez 22'", "Foden 45+2'", "White 73'", "Haaland 89'"],
+        },
+        {
+          date: "Aug 2024",
+          score: "1-0",
+          result: "W",
+          venue: "Away",
+          starPlayer: "Rodri (MOTM)",
+          highlightUrl: "https://www.youtube.com/watch?v=example120",
+          keyMoments: ["Haaland 76' (pen)", "Rodri tackle 89'"],
+        },
+      ],
+    },
   },
   newcastle: {
-    "man-city": { wins: 1, draws: 1, losses: 4, recentMatches: ["1-2 L", "3-3 D", "0-2 L", "1-0 W", "0-2 L", "1-3 L"] },
+    "man-city": {
+      wins: 1,
+      draws: 1,
+      losses: 4,
+      recentMatches: [
+        {
+          date: "Dec 2025",
+          score: "1-2",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Haaland (2 goals)",
+          highlightUrl: "https://www.youtube.com/watch?v=example121",
+          keyMoments: ["Haaland 12'", "Haaland 67'", "Saka 85'"],
+        },
+        {
+          date: "Sep 2025",
+          score: "0-0",
+          result: "D",
+          venue: "Home",
+          starPlayer: "Ederson (8 saves)",
+          highlightUrl: "https://www.youtube.com/watch?v=example122",
+          keyMoments: ["Ederson save 34'", "Raya save 76'", "VAR check 88'"],
+        },
+        {
+          date: "Apr 2025",
+          score: "1-3",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Ødegaard (1G, 2A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example123",
+          keyMoments: ["Jesus 15'", "Foden 23'", "Martinelli 56'", "Saka 78'"],
+        },
+        {
+          date: "Nov 2024",
+          score: "4-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "De Bruyne (3A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example124",
+          keyMoments: ["Haaland 8'", "Álvarez 22'", "Foden 45+2'", "White 73'", "Haaland 89'"],
+        },
+        {
+          date: "Aug 2024",
+          score: "1-0",
+          result: "W",
+          venue: "Away",
+          starPlayer: "Rodri (MOTM)",
+          highlightUrl: "https://www.youtube.com/watch?v=example125",
+          keyMoments: ["Haaland 76' (pen)", "Rodri tackle 89'"],
+        },
+      ],
+    },
     "aston-villa": {
       wins: 2,
       draws: 2,
       losses: 2,
-      recentMatches: ["3-1 W", "0-3 L", "1-1 D", "1-2 L", "1-1 D", "2-0 W"],
+      recentMatches: [
+        {
+          date: "Dec 2025",
+          score: "1-3",
+          result: "L",
+          venue: "Away",
+          starPlayer: "Watkins (brace)",
+          highlightUrl: "https://www.youtube.com/watch?v=example126",
+          keyMoments: ["Jesus 23'", "Watkins 45', 78'"],
+        },
+        {
+          date: "Aug 2025",
+          score: "3-0",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Isak (1G, 1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example127",
+          keyMoments: ["Isak 12'", "Gordon 45'", "Bruno G 78'"],
+        },
+        {
+          date: "May 2025",
+          score: "1-1",
+          result: "D",
+          venue: "Away",
+          starPlayer: "Raya (6 saves)",
+          highlightUrl: "https://www.youtube.com/watch?v=example128",
+          keyMoments: ["Raya save 34', 67'", "Martinez save 78'"],
+        },
+        {
+          date: "Feb 2025",
+          score: "2-1",
+          result: "W",
+          venue: "Home",
+          starPlayer: "Bruno G (1A)",
+          highlightUrl: "https://www.youtube.com/watch?v=example129",
+          keyMoments: ["Isak 67'", "Gordon 89'"],
+        },
+        {
+          date: "Nov 2024",
+          score: "1-1",
+          result: "D",
+          venue: "Away",
+          starPlayer: "Watkins (1G)",
+          highlightUrl: "https://www.youtube.com/watch?v=example130",
+          keyMoments: ["Watkins 56'", "Pope save 90+4'"],
+        },
+      ],
     },
-    tottenham: { wins: 2, draws: 1, losses: 3, recentMatches: ["4-0 W", "1-2 L", "2-2 D", "1-6 L", "2-1 W", "0-1 L"] },
-    chelsea: { wins: 1, draws: 2, losses: 3, recentMatches: ["1-1 D", "1-4 L", "0-2 L", "1-1 D", "1-0 W", "1-3 L"] },
   },
 }
 
@@ -898,47 +2248,95 @@ export function MatchPredictor() {
 
             {prediction.h2h && prediction.h2h.recentMatches && prediction.h2h.recentMatches.length > 0 && (
               <Card className="p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <Users className="h-5 w-5 text-primary" />
-                  <h3 className="text-lg font-bold">Head-to-Head Record (Last 6 Meetings)</h3>
-                </div>
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                  <div className="space-y-2 text-center p-4 rounded-lg bg-primary/10">
-                    <div className="text-3xl font-bold text-primary">{prediction.h2h.wins}</div>
-                    <div className="text-sm text-muted-foreground">{selectedHomeTeam.name} Wins</div>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Users className="h-5 w-5 text-primary" />
+                    <h3 className="text-lg font-bold">Head-to-Head Record (Last 5 Meetings)</h3>
                   </div>
-                  <div className="space-y-2 text-center p-4 rounded-lg bg-accent">
-                    <div className="text-3xl font-bold text-muted-foreground">{prediction.h2h.draws}</div>
-                    <div className="text-sm text-muted-foreground">Draws</div>
+                  <div className="grid grid-cols-3 gap-4 mb-6">
+                    <div className="space-y-2 text-center p-4 rounded-lg bg-primary/10">
+                      <div className="text-3xl font-bold text-primary">{prediction.h2h.wins}</div>
+                      <div className="text-sm text-muted-foreground">{selectedHomeTeam.name} Wins</div>
+                    </div>
+                    <div className="space-y-2 text-center p-4 rounded-lg bg-accent">
+                      <div className="text-3xl font-bold text-muted-foreground">{prediction.h2h.draws}</div>
+                      <div className="text-sm text-muted-foreground">Draws</div>
+                    </div>
+                    <div className="space-y-2 text-center p-4 rounded-lg bg-secondary/10">
+                      <div className="text-3xl font-bold text-secondary">{prediction.h2h.losses}</div>
+                      <div className="text-sm text-muted-foreground">{selectedAwayTeam.name} Wins</div>
+                    </div>
                   </div>
-                  <div className="space-y-2 text-center p-4 rounded-lg bg-secondary/10">
-                    <div className="text-3xl font-bold text-secondary">{prediction.h2h.losses}</div>
-                    <div className="text-sm text-muted-foreground">{selectedAwayTeam.name} Wins</div>
-                  </div>
-                </div>
 
-                <div className="space-y-3">
-                  <h4 className="text-sm font-semibold text-muted-foreground">Recent Fixtures</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {prediction.h2h.recentMatches.map((match: string, idx: number) => {
-                      const isWin = match.includes(" W")
-                      const isDraw = match.includes(" D")
-                      const isLoss = match.includes(" L")
-                      return (
-                        <div
-                          key={idx}
-                          className={`p-3 rounded-lg text-center font-semibold ${
-                            isWin
-                              ? "bg-primary/20 text-primary"
-                              : isDraw
-                                ? "bg-accent text-muted-foreground"
-                                : "bg-secondary/20 text-secondary"
-                          }`}
-                        >
-                          {match}
-                        </div>
-                      )
-                    })}
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-semibold text-muted-foreground">Recent Fixtures & Highlights</h4>
+                    <div className="space-y-3">
+                      {prediction.h2h.recentMatches.map((match: any, idx: number) => {
+                        const isWin = match.result === "W"
+                        const isDraw = match.result === "D"
+                        const isLoss = match.result === "L"
+                        return (
+                          <div
+                            key={idx}
+                            className={`p-4 rounded-lg border-l-4 ${
+                              isWin
+                                ? "bg-primary/5 border-primary"
+                                : isDraw
+                                  ? "bg-accent border-muted-foreground"
+                                  : "bg-secondary/5 border-secondary"
+                            }`}
+                          >
+                            <div className="flex justify-between items-start mb-2">
+                              <div className="flex items-center gap-3">
+                                <div
+                                  className={`px-3 py-1 rounded font-bold text-lg ${
+                                    isWin
+                                      ? "bg-primary text-primary-foreground"
+                                      : isDraw
+                                        ? "bg-accent text-foreground"
+                                        : "bg-secondary text-secondary-foreground"
+                                  }`}
+                                >
+                                  {match.score}
+                                </div>
+                                <div>
+                                  <div className="text-sm font-semibold">{match.date}</div>
+                                  <div className="text-xs text-muted-foreground">{match.venue}</div>
+                                </div>
+                              </div>
+                              {match.highlightUrl && (
+                                <a
+                                  href={match.highlightUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-1 text-xs text-primary hover:underline"
+                                >
+                                  <Video className="h-3 w-3" />
+                                  Watch Highlights
+                                </a>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-2 mb-2">
+                              <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                              <span className="text-sm font-medium">Star Player: {match.starPlayer}</span>
+                            </div>
+                            <div className="space-y-1">
+                              <div className="text-xs font-semibold text-muted-foreground">Key Moments:</div>
+                              <div className="flex flex-wrap gap-2">
+                                {match.keyMoments.map((moment: string, mIdx: number) => (
+                                  <span
+                                    key={mIdx}
+                                    className="text-xs px-2 py-1 rounded bg-background border border-border"
+                                  >
+                                    {moment}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
                   </div>
                 </div>
               </Card>
@@ -957,38 +2355,38 @@ export function MatchPredictor() {
                     <Shield className="h-5 w-5 text-primary" />
                     <h3 className="text-lg font-bold">Team Strength Radar</h3>
                   </div>
-                  <ResponsiveContainer width="100%" height={500}>
-                    <RadarChart data={radarData}>
-                      <PolarGrid stroke="hsl(var(--border))" strokeWidth={2} />
-                      <PolarAngleAxis
-                        dataKey="metric"
-                        tick={{ fill: "hsl(var(--foreground))", fontSize: 14, fontWeight: 600 }}
-                      />
-                      <PolarRadiusAxis
-                        angle={90}
-                        domain={[0, 100]}
-                        tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
-                        strokeWidth={2}
-                      />
-                      <Radar
-                        name={selectedHomeTeam.name}
-                        dataKey="home"
-                        stroke={selectedHomeTeam.color}
-                        fill={selectedHomeTeam.color}
-                        fillOpacity={0.5}
-                        strokeWidth={3}
-                      />
-                      <Radar
-                        name={selectedAwayTeam.name}
-                        dataKey="away"
-                        stroke={selectedAwayTeam.color}
-                        fill={selectedAwayTeam.color}
-                        fillOpacity={0.5}
-                        strokeWidth={3}
-                      />
-                      <Legend wrapperStyle={{ fontSize: "14px", fontWeight: 600 }} />
-                    </RadarChart>
-                  </ResponsiveContainer>
+                  <ChartContainer config={chartConfig} className="h-[400px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RadarChart data={radarData}>
+                        <PolarGrid stroke="white" strokeWidth={1.5} />
+                        <PolarAngleAxis dataKey="metric" tick={{ fill: "white", fontSize: 14, fontWeight: 700 }} />
+                        <PolarRadiusAxis
+                          angle={90}
+                          domain={[0, 100]}
+                          tick={{ fill: "white", fontSize: 12, fontWeight: 600 }}
+                          strokeWidth={2}
+                          stroke="white"
+                        />
+                        <Radar
+                          name={selectedHomeTeam.name}
+                          dataKey="home"
+                          stroke={selectedHomeTeam.color}
+                          fill={selectedHomeTeam.color}
+                          fillOpacity={0.5}
+                          strokeWidth={3}
+                        />
+                        <Radar
+                          name={selectedAwayTeam.name}
+                          dataKey="away"
+                          stroke={selectedAwayTeam.color}
+                          fill={selectedAwayTeam.color}
+                          fillOpacity={0.5}
+                          strokeWidth={3}
+                        />
+                        <Legend wrapperStyle={{ fontSize: "14px", fontWeight: 600, color: "white" }} />
+                      </RadarChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
                 </Card>
               </TabsContent>
 
