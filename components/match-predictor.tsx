@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Trophy, TrendingUp, Target, Activity, Zap, Shield, Users } from "lucide-react"
+import { Trophy, TrendingUp, Target, Activity, Zap, Shield, Users, History } from "lucide-react"
 import {
   RadarChart,
   PolarGrid,
@@ -24,7 +24,53 @@ import {
   Legend,
 } from "recharts"
 
-// Premier League teams with their stats
+const headToHeadRecords: Record<string, Record<string, { wins: number; draws: number; losses: number }>> = {
+  "man-city": {
+    arsenal: { wins: 3, draws: 0, losses: 1 },
+    liverpool: { wins: 2, draws: 1, losses: 1 },
+    "man-utd": { wins: 3, draws: 1, losses: 0 },
+    chelsea: { wins: 3, draws: 0, losses: 1 },
+    tottenham: { wins: 3, draws: 0, losses: 1 },
+    newcastle: { wins: 3, draws: 1, losses: 0 },
+  },
+  arsenal: {
+    "man-city": { wins: 1, draws: 0, losses: 3 },
+    liverpool: { wins: 1, draws: 1, losses: 2 },
+    "man-utd": { wins: 3, draws: 0, losses: 1 },
+    chelsea: { wins: 2, draws: 1, losses: 1 },
+    tottenham: { wins: 2, draws: 1, losses: 1 },
+  },
+  liverpool: {
+    "man-city": { wins: 1, draws: 1, losses: 2 },
+    arsenal: { wins: 2, draws: 1, losses: 1 },
+    "man-utd": { wins: 4, draws: 0, losses: 0 },
+    chelsea: { wins: 2, draws: 1, losses: 1 },
+    tottenham: { wins: 3, draws: 0, losses: 1 },
+    newcastle: { wins: 2, draws: 1, losses: 1 },
+  },
+  "man-utd": {
+    "man-city": { wins: 0, draws: 1, losses: 3 },
+    arsenal: { wins: 1, draws: 0, losses: 3 },
+    liverpool: { wins: 0, draws: 0, losses: 4 },
+    chelsea: { wins: 2, draws: 1, losses: 1 },
+    tottenham: { wins: 1, draws: 2, losses: 1 },
+  },
+  chelsea: {
+    "man-city": { wins: 1, draws: 0, losses: 3 },
+    arsenal: { wins: 1, draws: 1, losses: 2 },
+    liverpool: { wins: 1, draws: 1, losses: 2 },
+    "man-utd": { wins: 1, draws: 1, losses: 2 },
+    tottenham: { wins: 2, draws: 0, losses: 2 },
+  },
+  tottenham: {
+    "man-city": { wins: 1, draws: 0, losses: 3 },
+    arsenal: { wins: 1, draws: 1, losses: 2 },
+    liverpool: { wins: 1, draws: 0, losses: 3 },
+    "man-utd": { wins: 1, draws: 2, losses: 1 },
+    chelsea: { wins: 2, draws: 0, losses: 2 },
+  },
+}
+
 const teams = [
   {
     id: "man-city",
@@ -32,19 +78,19 @@ const teams = [
     logo: "🔵",
     color: "#6CABDD",
     stats: {
-      goals: 2.8,
-      assists: 2.4,
-      aerialDuels: 12.5,
-      ballHolding: 68,
-      dribbling: 18.2,
-      shotsPerGame: 16.8,
-      influence: 88,
-      rating: 7.45,
+      goals: 2.5,
+      assists: 2.3,
+      aerialDuels: 12.8,
+      ballHolding: 66,
+      dribbling: 17.5,
+      shotsPerGame: 16.2,
+      influence: 86,
+      rating: 7.38,
     },
     topPlayers: [
-      { name: "Erling Haaland", goals: 28, assists: 5, rating: 8.2 },
-      { name: "Kevin De Bruyne", goals: 7, assists: 18, rating: 7.9 },
-      { name: "Phil Foden", goals: 11, assists: 9, rating: 7.6 },
+      { name: "Erling Haaland", goals: 22, assists: 4, rating: 8.1 },
+      { name: "Phil Foden", goals: 8, assists: 6, rating: 7.5 },
+      { name: "Bernardo Silva", goals: 6, assists: 9, rating: 7.4 },
     ],
   },
   {
@@ -53,19 +99,19 @@ const teams = [
     logo: "🔴",
     color: "#EF0107",
     stats: {
-      goals: 2.6,
-      assists: 2.2,
-      aerialDuels: 13.8,
-      ballHolding: 62,
-      dribbling: 16.5,
-      shotsPerGame: 15.2,
-      influence: 85,
-      rating: 7.38,
+      goals: 2.4,
+      assists: 2.1,
+      aerialDuels: 13.2,
+      ballHolding: 61,
+      dribbling: 16.8,
+      shotsPerGame: 14.8,
+      influence: 84,
+      rating: 7.32,
     },
     topPlayers: [
-      { name: "Bukayo Saka", goals: 14, assists: 11, rating: 7.8 },
-      { name: "Martin Ødegaard", goals: 8, assists: 10, rating: 7.7 },
-      { name: "Gabriel Jesus", goals: 11, assists: 8, rating: 7.4 },
+      { name: "Bukayo Saka", goals: 12, assists: 10, rating: 7.9 },
+      { name: "Kai Havertz", goals: 10, assists: 6, rating: 7.4 },
+      { name: "Martin Ødegaard", goals: 6, assists: 8, rating: 7.6 },
     ],
   },
   {
@@ -74,19 +120,19 @@ const teams = [
     logo: "🔴",
     color: "#C8102E",
     stats: {
-      goals: 2.7,
-      assists: 2.3,
-      aerialDuels: 11.2,
-      ballHolding: 59,
-      dribbling: 17.8,
-      shotsPerGame: 16.5,
-      influence: 87,
-      rating: 7.42,
+      goals: 2.8,
+      assists: 2.5,
+      aerialDuels: 11.5,
+      ballHolding: 60,
+      dribbling: 18.2,
+      shotsPerGame: 17.2,
+      influence: 89,
+      rating: 7.52,
     },
     topPlayers: [
-      { name: "Mohamed Salah", goals: 18, assists: 12, rating: 8.1 },
-      { name: "Luis Díaz", goals: 13, assists: 5, rating: 7.5 },
-      { name: "Darwin Núñez", goals: 11, assists: 8, rating: 7.3 },
+      { name: "Mohamed Salah", goals: 29, assists: 18, rating: 8.4 },
+      { name: "Luis Díaz", goals: 15, assists: 7, rating: 7.7 },
+      { name: "Cody Gakpo", goals: 12, assists: 9, rating: 7.5 },
     ],
   },
   {
@@ -95,19 +141,19 @@ const teams = [
     logo: "🔴",
     color: "#DA291C",
     stats: {
-      goals: 2.1,
-      assists: 1.8,
-      aerialDuels: 13.5,
-      ballHolding: 55,
-      dribbling: 14.2,
-      shotsPerGame: 13.8,
-      influence: 76,
-      rating: 7.05,
+      goals: 1.9,
+      assists: 1.7,
+      aerialDuels: 13.8,
+      ballHolding: 53,
+      dribbling: 13.5,
+      shotsPerGame: 13.2,
+      influence: 74,
+      rating: 6.95,
     },
     topPlayers: [
-      { name: "Bruno Fernandes", goals: 10, assists: 8, rating: 7.4 },
-      { name: "Marcus Rashford", goals: 15, assists: 5, rating: 7.3 },
-      { name: "Casemiro", goals: 5, assists: 5, rating: 7.1 },
+      { name: "Bruno Fernandes", goals: 8, assists: 10, rating: 7.3 },
+      { name: "Marcus Rashford", goals: 11, assists: 4, rating: 7.0 },
+      { name: "Rasmus Højlund", goals: 13, assists: 2, rating: 7.1 },
     ],
   },
   {
@@ -116,19 +162,19 @@ const teams = [
     logo: "🔵",
     color: "#034694",
     stats: {
-      goals: 2.3,
-      assists: 2.0,
-      aerialDuels: 12.8,
-      ballHolding: 58,
-      dribbling: 15.6,
-      shotsPerGame: 14.5,
-      influence: 79,
-      rating: 7.15,
+      goals: 2.2,
+      assists: 1.9,
+      aerialDuels: 12.5,
+      ballHolding: 57,
+      dribbling: 16.2,
+      shotsPerGame: 14.8,
+      influence: 80,
+      rating: 7.22,
     },
     topPlayers: [
-      { name: "Cole Palmer", goals: 22, assists: 11, rating: 7.9 },
-      { name: "Nicolas Jackson", goals: 14, assists: 5, rating: 7.2 },
-      { name: "Raheem Sterling", goals: 8, assists: 4, rating: 7.0 },
+      { name: "Cole Palmer", goals: 18, assists: 12, rating: 8.0 },
+      { name: "Nicolas Jackson", goals: 12, assists: 4, rating: 7.2 },
+      { name: "Pedro Neto", goals: 5, assists: 7, rating: 7.1 },
     ],
   },
   {
@@ -137,19 +183,19 @@ const teams = [
     logo: "⚪",
     color: "#132257",
     stats: {
-      goals: 2.4,
-      assists: 2.1,
-      aerialDuels: 11.5,
-      ballHolding: 54,
-      dribbling: 16.8,
-      shotsPerGame: 15.8,
-      influence: 80,
-      rating: 7.22,
+      goals: 2.3,
+      assists: 2.0,
+      aerialDuels: 12.2,
+      ballHolding: 55,
+      dribbling: 17.2,
+      shotsPerGame: 15.5,
+      influence: 81,
+      rating: 7.25,
     },
     topPlayers: [
-      { name: "Son Heung-min", goals: 17, assists: 9, rating: 7.7 },
-      { name: "James Maddison", goals: 4, assists: 9, rating: 7.3 },
-      { name: "Dejan Kulusevski", goals: 8, assists: 8, rating: 7.2 },
+      { name: "Son Heung-min", goals: 14, assists: 8, rating: 7.6 },
+      { name: "Dominic Solanke", goals: 9, assists: 3, rating: 7.2 },
+      { name: "Dejan Kulusevski", goals: 7, assists: 9, rating: 7.3 },
     ],
   },
   {
@@ -158,19 +204,19 @@ const teams = [
     logo: "⚫",
     color: "#241F20",
     stats: {
-      goals: 2.2,
-      assists: 1.9,
-      aerialDuels: 14.2,
-      ballHolding: 52,
-      dribbling: 13.8,
-      shotsPerGame: 13.5,
-      influence: 78,
-      rating: 7.18,
+      goals: 2.4,
+      assists: 2.0,
+      aerialDuels: 14.5,
+      ballHolding: 54,
+      dribbling: 14.8,
+      shotsPerGame: 14.2,
+      influence: 82,
+      rating: 7.28,
     },
     topPlayers: [
-      { name: "Alexander Isak", goals: 21, assists: 2, rating: 7.6 },
-      { name: "Anthony Gordon", goals: 11, assists: 10, rating: 7.4 },
-      { name: "Bruno Guimarães", goals: 7, assists: 8, rating: 7.3 },
+      { name: "Alexander Isak", goals: 23, assists: 3, rating: 7.9 },
+      { name: "Anthony Gordon", goals: 9, assists: 12, rating: 7.5 },
+      { name: "Bruno Guimarães", goals: 6, assists: 7, rating: 7.4 },
     ],
   },
   {
@@ -179,19 +225,19 @@ const teams = [
     logo: "🦁",
     color: "#670E36",
     stats: {
-      goals: 2.3,
-      assists: 2.0,
-      aerialDuels: 13.2,
-      ballHolding: 53,
-      dribbling: 14.5,
-      shotsPerGame: 14.2,
+      goals: 2.1,
+      assists: 1.8,
+      aerialDuels: 13.5,
+      ballHolding: 52,
+      dribbling: 14.2,
+      shotsPerGame: 13.8,
       influence: 77,
-      rating: 7.12,
+      rating: 7.08,
     },
     topPlayers: [
-      { name: "Ollie Watkins", goals: 19, assists: 13, rating: 7.7 },
-      { name: "Moussa Diaby", goals: 9, assists: 9, rating: 7.2 },
-      { name: "Douglas Luiz", goals: 9, assists: 5, rating: 7.1 },
+      { name: "Ollie Watkins", goals: 16, assists: 8, rating: 7.5 },
+      { name: "Morgan Rogers", goals: 7, assists: 10, rating: 7.2 },
+      { name: "Jhon Durán", goals: 11, assists: 2, rating: 7.0 },
     ],
   },
   {
@@ -202,17 +248,17 @@ const teams = [
     stats: {
       goals: 2.0,
       assists: 1.8,
-      aerialDuels: 10.5,
-      ballHolding: 56,
-      dribbling: 15.2,
-      shotsPerGame: 13.0,
-      influence: 74,
-      rating: 7.02,
+      aerialDuels: 10.8,
+      ballHolding: 58,
+      dribbling: 15.8,
+      shotsPerGame: 13.5,
+      influence: 75,
+      rating: 7.12,
     },
     topPlayers: [
-      { name: "Kaoru Mitoma", goals: 7, assists: 7, rating: 7.3 },
-      { name: "Evan Ferguson", goals: 10, assists: 1, rating: 7.1 },
-      { name: "Pascal Groß", goals: 5, assists: 8, rating: 7.2 },
+      { name: "Kaoru Mitoma", goals: 8, assists: 6, rating: 7.4 },
+      { name: "Georginio Rutter", goals: 7, assists: 9, rating: 7.2 },
+      { name: "João Pedro", goals: 9, assists: 4, rating: 7.3 },
     ],
   },
   {
@@ -221,19 +267,19 @@ const teams = [
     logo: "⚒️",
     color: "#7A263A",
     stats: {
-      goals: 1.9,
-      assists: 1.6,
-      aerialDuels: 15.8,
-      ballHolding: 48,
-      dribbling: 12.5,
-      shotsPerGame: 12.8,
-      influence: 71,
-      rating: 6.95,
+      goals: 1.7,
+      assists: 1.5,
+      aerialDuels: 15.2,
+      ballHolding: 47,
+      dribbling: 12.2,
+      shotsPerGame: 12.5,
+      influence: 70,
+      rating: 6.88,
     },
     topPlayers: [
-      { name: "Jarrod Bowen", goals: 16, assists: 6, rating: 7.4 },
-      { name: "Lucas Paquetá", goals: 4, assists: 7, rating: 7.0 },
-      { name: "Mohammed Kudus", goals: 8, assists: 5, rating: 7.1 },
+      { name: "Jarrod Bowen", goals: 12, assists: 5, rating: 7.2 },
+      { name: "Lucas Paquetá", goals: 3, assists: 6, rating: 6.9 },
+      { name: "Mohammed Kudus", goals: 8, assists: 4, rating: 7.0 },
     ],
   },
   {
@@ -242,19 +288,19 @@ const teams = [
     logo: "🟠",
     color: "#FDB913",
     stats: {
-      goals: 1.6,
-      assists: 1.4,
-      aerialDuels: 14.5,
-      ballHolding: 46,
-      dribbling: 11.8,
-      shotsPerGame: 11.5,
-      influence: 68,
-      rating: 6.82,
+      goals: 1.5,
+      assists: 1.3,
+      aerialDuels: 14.2,
+      ballHolding: 44,
+      dribbling: 11.5,
+      shotsPerGame: 11.2,
+      influence: 66,
+      rating: 6.75,
     },
     topPlayers: [
-      { name: "Hwang Hee-chan", goals: 12, assists: 4, rating: 7.0 },
-      { name: "Pedro Neto", goals: 3, assists: 9, rating: 6.9 },
-      { name: "Matheus Cunha", goals: 10, assists: 5, rating: 7.1 },
+      { name: "Matheus Cunha", goals: 14, assists: 6, rating: 7.3 },
+      { name: "Hwang Hee-chan", goals: 9, assists: 3, rating: 6.9 },
+      { name: "Jørgen Strand Larsen", goals: 7, assists: 2, rating: 6.8 },
     ],
   },
   {
@@ -263,19 +309,19 @@ const teams = [
     logo: "🐝",
     color: "#E30613",
     stats: {
-      goals: 1.9,
-      assists: 1.7,
-      aerialDuels: 16.2,
-      ballHolding: 44,
-      dribbling: 11.2,
-      shotsPerGame: 12.2,
-      influence: 70,
-      rating: 6.88,
+      goals: 2.1,
+      assists: 1.8,
+      aerialDuels: 16.5,
+      ballHolding: 45,
+      dribbling: 11.8,
+      shotsPerGame: 12.8,
+      influence: 73,
+      rating: 7.02,
     },
     topPlayers: [
-      { name: "Ivan Toney", goals: 20, assists: 4, rating: 7.5 },
-      { name: "Bryan Mbeumo", goals: 8, assists: 7, rating: 7.1 },
-      { name: "Yoane Wissa", goals: 12, assists: 3, rating: 6.9 },
+      { name: "Bryan Mbeumo", goals: 20, assists: 8, rating: 7.8 },
+      { name: "Yoane Wissa", goals: 11, assists: 4, rating: 7.1 },
+      { name: "Mikkel Damsgaard", goals: 4, assists: 10, rating: 6.9 },
     ],
   },
   {
@@ -286,17 +332,17 @@ const teams = [
     stats: {
       goals: 1.8,
       assists: 1.6,
-      aerialDuels: 12.8,
-      ballHolding: 50,
-      dribbling: 13.5,
-      shotsPerGame: 11.8,
-      influence: 69,
-      rating: 6.9,
+      aerialDuels: 13.2,
+      ballHolding: 51,
+      dribbling: 13.8,
+      shotsPerGame: 12.2,
+      influence: 71,
+      rating: 6.95,
     },
     topPlayers: [
-      { name: "Rodrigo Muniz", goals: 13, assists: 2, rating: 7.0 },
-      { name: "Willian", goals: 3, assists: 8, rating: 6.9 },
-      { name: "Andreas Pereira", goals: 3, assists: 6, rating: 6.8 },
+      { name: "Rodrigo Muniz", goals: 11, assists: 2, rating: 7.1 },
+      { name: "Emile Smith Rowe", goals: 7, assists: 8, rating: 7.0 },
+      { name: "Antonee Robinson", goals: 1, assists: 10, rating: 7.2 },
     ],
   },
   {
@@ -305,19 +351,19 @@ const teams = [
     logo: "🍒",
     color: "#DA291C",
     stats: {
-      goals: 1.7,
-      assists: 1.5,
-      aerialDuels: 13.5,
-      ballHolding: 45,
-      dribbling: 12.0,
-      shotsPerGame: 11.0,
-      influence: 67,
-      rating: 6.75,
+      goals: 1.8,
+      assists: 1.6,
+      aerialDuels: 13.8,
+      ballHolding: 46,
+      dribbling: 12.5,
+      shotsPerGame: 11.8,
+      influence: 69,
+      rating: 6.85,
     },
     topPlayers: [
-      { name: "Dominic Solanke", goals: 19, assists: 3, rating: 7.3 },
-      { name: "Antoine Semenyo", goals: 8, assists: 2, rating: 6.8 },
-      { name: "Marcus Tavernier", goals: 6, assists: 7, rating: 6.9 },
+      { name: "Evanilson", goals: 8, assists: 2, rating: 6.9 },
+      { name: "Antoine Semenyo", goals: 10, assists: 3, rating: 7.0 },
+      { name: "Justin Kluivert", goals: 7, assists: 6, rating: 6.8 },
     ],
   },
   {
@@ -326,19 +372,19 @@ const teams = [
     logo: "🦅",
     color: "#1B458F",
     stats: {
-      goals: 1.5,
-      assists: 1.3,
-      aerialDuels: 14.8,
-      ballHolding: 43,
-      dribbling: 11.5,
-      shotsPerGame: 10.5,
-      influence: 65,
-      rating: 6.7,
+      goals: 1.6,
+      assists: 1.4,
+      aerialDuels: 14.5,
+      ballHolding: 44,
+      dribbling: 12.0,
+      shotsPerGame: 10.8,
+      influence: 67,
+      rating: 6.78,
     },
     topPlayers: [
-      { name: "Eberechi Eze", goals: 11, assists: 4, rating: 7.2 },
-      { name: "Michael Olise", goals: 10, assists: 6, rating: 7.1 },
-      { name: "Jean-Philippe Mateta", goals: 16, assists: 2, rating: 7.0 },
+      { name: "Eberechi Eze", goals: 9, assists: 5, rating: 7.1 },
+      { name: "Jean-Philippe Mateta", goals: 12, assists: 3, rating: 6.9 },
+      { name: "Eddie Nketiah", goals: 6, assists: 2, rating: 6.7 },
     ],
   },
   {
@@ -347,19 +393,19 @@ const teams = [
     logo: "🔵",
     color: "#003399",
     stats: {
-      goals: 1.4,
-      assists: 1.2,
-      aerialDuels: 15.5,
-      ballHolding: 42,
-      dribbling: 10.8,
-      shotsPerGame: 10.2,
-      influence: 64,
-      rating: 6.65,
+      goals: 1.3,
+      assists: 1.1,
+      aerialDuels: 15.8,
+      ballHolding: 41,
+      dribbling: 10.5,
+      shotsPerGame: 10.0,
+      influence: 63,
+      rating: 6.58,
     },
     topPlayers: [
-      { name: "Dominic Calvert-Lewin", goals: 7, assists: 2, rating: 6.8 },
-      { name: "Dwight McNeil", goals: 3, assists: 7, rating: 6.7 },
-      { name: "Abdoulaye Doucouré", goals: 6, assists: 2, rating: 6.7 },
+      { name: "Iliman Ndiaye", goals: 6, assists: 4, rating: 6.8 },
+      { name: "Dominic Calvert-Lewin", goals: 5, assists: 1, rating: 6.6 },
+      { name: "Dwight McNeil", goals: 2, assists: 6, rating: 6.7 },
     ],
   },
   {
@@ -368,19 +414,19 @@ const teams = [
     logo: "🌳",
     color: "#DD0000",
     stats: {
-      goals: 1.6,
-      assists: 1.4,
-      aerialDuels: 16.5,
-      ballHolding: 41,
-      dribbling: 10.5,
-      shotsPerGame: 10.8,
-      influence: 66,
-      rating: 6.72,
+      goals: 1.9,
+      assists: 1.7,
+      aerialDuels: 16.8,
+      ballHolding: 42,
+      dribbling: 11.2,
+      shotsPerGame: 11.5,
+      influence: 72,
+      rating: 6.95,
     },
     topPlayers: [
-      { name: "Chris Wood", goals: 14, assists: 1, rating: 7.0 },
-      { name: "Anthony Elanga", goals: 5, assists: 10, rating: 6.9 },
-      { name: "Morgan Gibbs-White", goals: 5, assists: 10, rating: 7.1 },
+      { name: "Chris Wood", goals: 20, assists: 2, rating: 7.4 },
+      { name: "Anthony Elanga", goals: 5, assists: 11, rating: 7.0 },
+      { name: "Morgan Gibbs-White", goals: 6, assists: 8, rating: 7.1 },
     ],
   },
   {
@@ -389,19 +435,19 @@ const teams = [
     logo: "🟣",
     color: "#6C1D45",
     stats: {
-      goals: 1.3,
-      assists: 1.1,
-      aerialDuels: 17.2,
-      ballHolding: 38,
-      dribbling: 9.5,
-      shotsPerGame: 9.5,
-      influence: 61,
-      rating: 6.55,
+      goals: 1.2,
+      assists: 1.0,
+      aerialDuels: 17.5,
+      ballHolding: 37,
+      dribbling: 9.2,
+      shotsPerGame: 9.2,
+      influence: 59,
+      rating: 6.45,
     },
     topPlayers: [
-      { name: "Lyle Foster", goals: 5, assists: 1, rating: 6.6 },
-      { name: "Wilson Odobert", goals: 3, assists: 2, rating: 6.5 },
-      { name: "Zeki Amdouni", goals: 4, assists: 1, rating: 6.4 },
+      { name: "Lyle Foster", goals: 4, assists: 1, rating: 6.5 },
+      { name: "Zeki Amdouni", goals: 3, assists: 1, rating: 6.3 },
+      { name: "Josh Brownhill", goals: 2, assists: 2, rating: 6.4 },
     ],
   },
   {
@@ -410,19 +456,19 @@ const teams = [
     logo: "⚪",
     color: "#FFCD00",
     stats: {
-      goals: 1.8,
-      assists: 1.6,
-      aerialDuels: 12.2,
-      ballHolding: 54,
-      dribbling: 13.8,
-      shotsPerGame: 12.5,
-      influence: 72,
-      rating: 6.92,
+      goals: 1.7,
+      assists: 1.5,
+      aerialDuels: 12.5,
+      ballHolding: 53,
+      dribbling: 13.5,
+      shotsPerGame: 12.2,
+      influence: 70,
+      rating: 6.85,
     },
     topPlayers: [
-      { name: "Crysencio Summerville", goals: 14, assists: 9, rating: 7.3 },
-      { name: "Georginio Rutter", goals: 6, assists: 15, rating: 7.1 },
-      { name: "Joel Piroe", goals: 13, assists: 2, rating: 6.9 },
+      { name: "Wilfried Gnonto", goals: 8, assists: 5, rating: 7.0 },
+      { name: "Joel Piroe", goals: 10, assists: 2, rating: 6.8 },
+      { name: "Crysencio Summerville", goals: 6, assists: 7, rating: 6.9 },
     ],
   },
   {
@@ -431,19 +477,19 @@ const teams = [
     logo: "🦢",
     color: "#121212",
     stats: {
-      goals: 1.5,
-      assists: 1.3,
-      aerialDuels: 11.8,
-      ballHolding: 52,
-      dribbling: 12.8,
-      shotsPerGame: 11.2,
-      influence: 68,
-      rating: 6.78,
+      goals: 1.4,
+      assists: 1.2,
+      aerialDuels: 11.5,
+      ballHolding: 51,
+      dribbling: 12.5,
+      shotsPerGame: 10.8,
+      influence: 65,
+      rating: 6.68,
     },
     topPlayers: [
-      { name: "Jerry Yates", goals: 8, assists: 2, rating: 6.8 },
-      { name: "Jamal Lowe", goals: 7, assists: 5, rating: 6.7 },
-      { name: "Matt Grimes", goals: 2, assists: 7, rating: 6.9 },
+      { name: "Jerry Yates", goals: 7, assists: 2, rating: 6.7 },
+      { name: "Jamal Lowe", goals: 5, assists: 4, rating: 6.6 },
+      { name: "Matt Grimes", goals: 2, assists: 6, rating: 6.8 },
     ],
   },
 ]
@@ -459,13 +505,19 @@ export function MatchPredictor() {
   const calculatePrediction = () => {
     if (!selectedHomeTeam || !selectedAwayTeam) return
 
-    // Calculate team strength scores
+    // Get head-to-head record
+    const h2h = headToHeadRecords[homeTeam]?.[awayTeam] || { wins: 0, draws: 0, losses: 0 }
+    const totalH2H = h2h.wins + h2h.draws + h2h.losses || 1
+    const h2hAdvantage = ((h2h.wins - h2h.losses) / totalH2H) * 15 // H2H contributes up to 15 points
+
+    // Calculate team strength scores with head-to-head factor
     const homeScore =
       selectedHomeTeam.stats.goals * 15 +
       selectedHomeTeam.stats.assists * 10 +
       selectedHomeTeam.stats.influence * 0.8 +
       selectedHomeTeam.stats.rating * 8 +
       selectedHomeTeam.stats.shotsPerGame * 2 +
+      h2hAdvantage +
       20 // Home advantage
 
     const awayScore =
@@ -473,12 +525,13 @@ export function MatchPredictor() {
       selectedAwayTeam.stats.assists * 10 +
       selectedAwayTeam.stats.influence * 0.8 +
       selectedAwayTeam.stats.rating * 8 +
-      selectedAwayTeam.stats.shotsPerGame * 2
+      selectedAwayTeam.stats.shotsPerGame * 2 -
+      h2hAdvantage
 
     const totalScore = homeScore + awayScore
     const homeWinProb = (homeScore / totalScore) * 100
     const awayWinProb = (awayScore / totalScore) * 100
-    const drawProb = 100 - homeWinProb - awayWinProb + 15 // Adjust for draw probability
+    const drawProb = 100 - homeWinProb - awayWinProb + 15
 
     // Normalize probabilities
     const total = homeWinProb + awayWinProb + drawProb
@@ -492,6 +545,7 @@ export function MatchPredictor() {
       draw: normalizedDraw,
       predictedScore: `${Math.round(selectedHomeTeam.stats.goals)}-${Math.round(selectedAwayTeam.stats.goals)}`,
       confidence: Math.max(normalizedHome, normalizedAway, normalizedDraw),
+      h2h,
     })
   }
 
@@ -573,7 +627,7 @@ export function MatchPredictor() {
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Premier League Predictor</h1>
         </div>
         <p className="text-muted-foreground text-lg">
-          AI-powered match predictions using real-time player statistics and advanced analytics
+          AI-powered match predictions using 2024-25 season statistics and historical data
         </p>
       </div>
 
@@ -675,193 +729,162 @@ export function MatchPredictor() {
 
               <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                 <Zap className="h-4 w-4" />
-                <span>Prediction based on 8+ statistical factors including player form</span>
+                Powered by real-time player statistics and advanced analytics
               </div>
             </Card>
 
-            {/* Detailed Analytics */}
-            <Tabs defaultValue="stats" className="w-full">
+            {prediction.h2h && (prediction.h2h.wins > 0 || prediction.h2h.draws > 0 || prediction.h2h.losses > 0) && (
+              <Card className="p-6 bg-card border-border">
+                <div className="flex items-center gap-2 mb-6">
+                  <History className="h-5 w-5 text-primary" />
+                  <h2 className="text-xl font-bold">Head-to-Head Record (Last 2 Years)</h2>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div className="space-y-2">
+                    <div className="text-3xl font-bold text-primary">{prediction.h2h.wins}</div>
+                    <div className="text-sm text-muted-foreground">{selectedHomeTeam.name} Wins</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-3xl font-bold">{prediction.h2h.draws}</div>
+                    <div className="text-sm text-muted-foreground">Draws</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-3xl font-bold text-secondary">{prediction.h2h.losses}</div>
+                    <div className="text-sm text-muted-foreground">{selectedAwayTeam.name} Wins</div>
+                  </div>
+                </div>
+              </Card>
+            )}
+
+            {/* Statistics Comparison */}
+            <Tabs defaultValue="overview" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="stats">Team Stats</TabsTrigger>
-                <TabsTrigger value="players">Top Players</TabsTrigger>
+                <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="comparison">Comparison</TabsTrigger>
+                <TabsTrigger value="players">Top Players</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="stats" className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-6">
-                  {/* Home Team Stats */}
-                  <Card className="p-6 bg-card">
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="text-3xl">{selectedHomeTeam.logo}</div>
-                      <div>
-                        <h3 className="font-bold text-lg">{selectedHomeTeam.name}</h3>
-                        <Badge variant="secondary">Home</Badge>
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      <StatRow label="Goals per Game" value={selectedHomeTeam.stats.goals} max={3} />
-                      <StatRow label="Assists per Game" value={selectedHomeTeam.stats.assists} max={3} />
-                      <StatRow label="Aerial Duels Won" value={selectedHomeTeam.stats.aerialDuels} max={20} />
-                      <StatRow label="Ball Holding %" value={selectedHomeTeam.stats.ballHolding} max={100} />
-                      <StatRow label="Dribbles per Game" value={selectedHomeTeam.stats.dribbling} max={25} />
-                      <StatRow label="Shots per Game" value={selectedHomeTeam.stats.shotsPerGame} max={20} />
-                      <StatRow label="Team Influence" value={selectedHomeTeam.stats.influence} max={100} />
-                      <StatRow label="Team Rating" value={selectedHomeTeam.stats.rating} max={10} />
-                    </div>
-                  </Card>
-
-                  {/* Away Team Stats */}
-                  <Card className="p-6 bg-card">
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="text-3xl">{selectedAwayTeam.logo}</div>
-                      <div>
-                        <h3 className="font-bold text-lg">{selectedAwayTeam.name}</h3>
-                        <Badge variant="outline">Away</Badge>
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      <StatRow label="Goals per Game" value={selectedAwayTeam.stats.goals} max={3} />
-                      <StatRow label="Assists per Game" value={selectedAwayTeam.stats.assists} max={3} />
-                      <StatRow label="Aerial Duels Won" value={selectedAwayTeam.stats.aerialDuels} max={20} />
-                      <StatRow label="Ball Holding %" value={selectedAwayTeam.stats.ballHolding} max={100} />
-                      <StatRow label="Dribbles per Game" value={selectedAwayTeam.stats.dribbling} max={25} />
-                      <StatRow label="Shots per Game" value={selectedAwayTeam.stats.shotsPerGame} max={20} />
-                      <StatRow label="Team Influence" value={selectedAwayTeam.stats.influence} max={100} />
-                      <StatRow label="Team Rating" value={selectedAwayTeam.stats.rating} max={10} />
-                    </div>
-                  </Card>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="players" className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-6">
-                  {/* Home Team Players */}
-                  <Card className="p-6 bg-card">
-                    <div className="flex items-center gap-3 mb-6">
-                      <Shield className="h-5 w-5 text-primary" />
-                      <h3 className="font-bold">{selectedHomeTeam.name} - Key Players</h3>
-                    </div>
-
-                    <div className="space-y-4">
-                      {selectedHomeTeam.topPlayers.map((player, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-4 bg-background rounded-lg">
-                          <div>
-                            <div className="font-semibold">{player.name}</div>
-                            <div className="text-sm text-muted-foreground">
-                              {player.goals}G · {player.assists}A
-                            </div>
-                          </div>
-                          <Badge variant="secondary" className="text-lg">
-                            {player.rating}
-                          </Badge>
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-
-                  {/* Away Team Players */}
-                  <Card className="p-6 bg-card">
-                    <div className="flex items-center gap-3 mb-6">
-                      <Shield className="h-5 w-5 text-secondary" />
-                      <h3 className="font-bold">{selectedAwayTeam.name} - Key Players</h3>
-                    </div>
-
-                    <div className="space-y-4">
-                      {selectedAwayTeam.topPlayers.map((player, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-4 bg-background rounded-lg">
-                          <div>
-                            <div className="font-semibold">{player.name}</div>
-                            <div className="text-sm text-muted-foreground">
-                              {player.goals}G · {player.assists}A
-                            </div>
-                          </div>
-                          <Badge variant="secondary" className="text-lg">
-                            {player.rating}
-                          </Badge>
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-                </div>
+              <TabsContent value="overview" className="space-y-4">
+                <Card className="p-6">
+                  <div className="flex items-center gap-2 mb-6">
+                    <Shield className="h-5 w-5 text-primary" />
+                    <h3 className="text-lg font-bold">Team Strength Radar</h3>
+                  </div>
+                  <ResponsiveContainer width="100%" height={400}>
+                    <RadarChart data={radarData}>
+                      <PolarGrid stroke="hsl(var(--border))" />
+                      <PolarAngleAxis dataKey="metric" tick={{ fill: "hsl(var(--foreground))", fontSize: 12 }} />
+                      <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fill: "hsl(var(--muted-foreground))" }} />
+                      <Radar
+                        name={selectedHomeTeam.name}
+                        dataKey="home"
+                        stroke={selectedHomeTeam.color}
+                        fill={selectedHomeTeam.color}
+                        fillOpacity={0.4}
+                      />
+                      <Radar
+                        name={selectedAwayTeam.name}
+                        dataKey="away"
+                        stroke={selectedAwayTeam.color}
+                        fill={selectedAwayTeam.color}
+                        fillOpacity={0.4}
+                      />
+                      <Legend />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </Card>
               </TabsContent>
 
               <TabsContent value="comparison" className="space-y-4">
-                <Card className="p-6 bg-card">
+                <Card className="p-6">
                   <div className="flex items-center gap-2 mb-6">
                     <TrendingUp className="h-5 w-5 text-primary" />
-                    <h3 className="font-bold text-lg">Head-to-Head Statistics</h3>
+                    <h3 className="text-lg font-bold">Statistical Comparison</h3>
                   </div>
-
-                  <div className="space-y-8">
-                    {/* Radar Chart */}
-                    <div className="h-96">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <RadarChart data={radarData}>
-                          <PolarGrid stroke="hsl(var(--border))" />
-                          <PolarAngleAxis dataKey="metric" tick={{ fill: "hsl(var(--foreground))" }} />
-                          <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                          <Radar
-                            name={selectedHomeTeam.name}
-                            dataKey="home"
-                            stroke={selectedHomeTeam.color}
-                            fill={selectedHomeTeam.color}
-                            fillOpacity={0.3}
-                          />
-                          <Radar
-                            name={selectedAwayTeam.name}
-                            dataKey="away"
-                            stroke={selectedAwayTeam.color}
-                            fill={selectedAwayTeam.color}
-                            fillOpacity={0.3}
-                          />
-                          <Legend />
-                        </RadarChart>
-                      </ResponsiveContainer>
-                    </div>
-
-                    {/* Bar Comparison */}
-                    <div className="h-80">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={comparisonData}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                          <XAxis dataKey="metric" tick={{ fill: "hsl(var(--foreground))" }} />
-                          <YAxis tick={{ fill: "hsl(var(--foreground))" }} />
-                          <Tooltip
-                            contentStyle={{
-                              backgroundColor: "hsl(var(--popover))",
-                              border: "1px solid hsl(var(--border))",
-                              borderRadius: "var(--radius)",
-                            }}
-                          />
-                          <Legend />
-                          <Bar dataKey="home" fill={selectedHomeTeam.color} name={selectedHomeTeam.name} />
-                          <Bar dataKey="away" fill={selectedAwayTeam.color} name={selectedAwayTeam.name} />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
+                  <ResponsiveContainer width="100%" height={400}>
+                    <BarChart data={comparisonData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis dataKey="metric" tick={{ fill: "hsl(var(--foreground))" }} />
+                      <YAxis tick={{ fill: "hsl(var(--muted-foreground))" }} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "hsl(var(--background))",
+                          border: "1px solid hsl(var(--border))",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Legend />
+                      <Bar
+                        dataKey="home"
+                        name={selectedHomeTeam.name}
+                        fill={selectedHomeTeam.color}
+                        radius={[8, 8, 0, 0]}
+                      />
+                      <Bar
+                        dataKey="away"
+                        name={selectedAwayTeam.name}
+                        fill={selectedAwayTeam.color}
+                        radius={[8, 8, 0, 0]}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </Card>
+              </TabsContent>
+
+              <TabsContent value="players" className="space-y-4">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <Card className="p-6">
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="text-2xl">{selectedHomeTeam.logo}</span>
+                      <h3 className="text-lg font-bold">{selectedHomeTeam.name}</h3>
+                    </div>
+                    <div className="space-y-4">
+                      {selectedHomeTeam.topPlayers.map((player, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                          <div>
+                            <div className="font-semibold">{player.name}</div>
+                            <div className="text-sm text-muted-foreground">
+                              {player.goals}G · {player.assists}A
+                            </div>
+                          </div>
+                          <Badge variant="secondary">{player.rating}</Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+
+                  <Card className="p-6">
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="text-2xl">{selectedAwayTeam.logo}</span>
+                      <h3 className="text-lg font-bold">{selectedAwayTeam.name}</h3>
+                    </div>
+                    <div className="space-y-4">
+                      {selectedAwayTeam.topPlayers.map((player, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                          <div>
+                            <div className="font-semibold">{player.name}</div>
+                            <div className="text-sm text-muted-foreground">
+                              {player.goals}G · {player.assists}A
+                            </div>
+                          </div>
+                          <Badge variant="secondary">{player.rating}</Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                </div>
               </TabsContent>
             </Tabs>
           </>
         )}
       </div>
-    </div>
-  )
-}
 
-function StatRow({ label, value, max }: { label: string; value: number; max: number }) {
-  const percentage = (value / max) * 100
-
-  return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-muted-foreground">{label}</span>
-        <span className="font-bold">{value.toFixed(1)}</span>
+      <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-border">
+        <p className="text-center text-sm text-muted-foreground">
+          All rights reserved for SanaTech Solutions © {new Date().getFullYear()}
+        </p>
       </div>
-      <Progress value={percentage} className="h-2" />
     </div>
   )
 }
