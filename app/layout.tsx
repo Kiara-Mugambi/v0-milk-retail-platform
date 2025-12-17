@@ -1,16 +1,16 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Inter, JetBrains_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"] })
+const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "DairySight - Milk Retail Platform",
+  title: "Premier League Match Predictor - Analytics & Predictions",
   description:
-    "Track, analyze, and optimize your milk vending ATMs with real-time sales analytics and device monitoring",
+    "Predict Premier League match outcomes using real-time player statistics, advanced analytics, and AI-powered win probability calculations",
   generator: "v0.app",
   icons: {
     icon: [
@@ -38,7 +38,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`font-sans antialiased bg-background text-foreground`}>
+      <body className={`${inter.className} antialiased bg-background text-foreground`}>
         {children}
         <Analytics />
       </body>
