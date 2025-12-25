@@ -1,19 +1,46 @@
 import { ChevronRight } from "lucide-react"
+import Link from "next/link"
+import {
+  fetchMoviesByCategory,
+  fetchTVShows,
+  fetchTrending,
+  getImageUrl,
+  getTitle,
+  getReleaseYear,
+  isMovie,
+  type MediaItem,
+} from "@/lib/tmdb"
 
 interface MovieGridProps {
   title: string
-  category: string
+  category: "trending" | "popular" | "top_rated" | "upcoming" | "tv_popular" | "tv_top_rated"
 }
 
-export function MovieGrid({ title }: MovieGridProps) {
-  // Mock data
-  const movies = Array.from({ length: 6 }).map((_, i) => ({
-    id: i,
-    title: `Movie Title ${i + 1}`,
-    image: `/placeholder.svg?height=600&width=400&query=movie poster aesthetic ${i}`,
-    year: "2024",
-    rating: "4.8",
-  }))
+export async function MovieGrid({ title, category }: MovieGridProps) {
+  let items: MediaItem[] = []
+
+  switch (category) {
+    case "trending":
+      items = await fetchTrending("movie")
+      break
+    case "popular":
+      items = await fetchMoviesByCategory("popular")
+      break
+    case "top_rated":
+      items = await fetchMoviesByCategory("top_rated")
+      break
+    case "upcoming":
+      items = await fetchMoviesByCategory("upcoming")
+      break
+    case "tv_popular":
+      items = await fetchTVShows("popular")
+      break
+    case "tv_top_rated":
+      items = await fetchTVShows("top_rated")
+      break
+  }
+
+  const displayItems = items.slice(0, 6)
 
   return (
     <section className="space-y-6 group">
@@ -25,30 +52,36 @@ export function MovieGrid({ title }: MovieGridProps) {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-        {movies.map((movie) => (
-          <div
-            key={movie.id}
-            className="relative aspect-[2/3] group/card cursor-pointer overflow-hidden rounded-lg border border-white/5 bg-card transition-all hover:scale-105 hover:shadow-2xl hover:shadow-white/5"
-          >
-            <img
-              src={movie.image || "/placeholder.svg"}
-              alt={movie.title}
-              className="object-cover w-full h-full grayscale-[0.2] group-hover/card:grayscale-0 transition-all duration-500"
-            />
+        {displayItems.map((item) => {
+          const mediaType = isMovie(item) ? "movie" : "tv"
+          const itemTitle = getTitle(item)
+          const year = getReleaseYear(item)
+          const rating = item.vote_average.toFixed(1)
+          const posterUrl = getImageUrl(item.poster_path)
 
-            {/* Hover overlay inspired by Vercel dashboard hover states */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-              <p className="font-bold text-sm leading-tight mb-1">{movie.title}</p>
-              <div className="flex items-center justify-between text-[10px] font-bold text-white/60">
-                <span>{movie.year}</span>
-                <span className="text-white">⭐ {movie.rating}</span>
+          return (
+            <Link key={item.id} href={`/watch/${mediaType}/${item.id}`}>
+              <div className="relative aspect-[2/3] group/card cursor-pointer overflow-hidden rounded-lg border border-white/5 bg-card transition-all hover:scale-105 hover:shadow-2xl hover:shadow-white/5">
+                <img
+                  src={posterUrl || "/placeholder.svg"}
+                  alt={itemTitle}
+                  className="object-cover w-full h-full grayscale-[0.2] group-hover/card:grayscale-0 transition-all duration-500"
+                />
+
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                  <p className="font-bold text-sm leading-tight mb-1 line-clamp-2">{itemTitle}</p>
+                  <div className="flex items-center justify-between text-[10px] font-bold text-white/60">
+                    <span>{year}</span>
+                    <span className="text-white">⭐ {rating}</span>
+                  </div>
+                </div>
+
+                <div className="absolute inset-0 rounded-lg border border-white/10 pointer-events-none group-hover/card:border-white/40 transition-colors" />
               </div>
-            </div>
-
-            {/* High-end border shine effect */}
-            <div className="absolute inset-0 rounded-lg border border-white/10 pointer-events-none group-hover/card:border-white/40 transition-colors" />
-          </div>
-        ))}
+            </Link>
+          )
+        })}
       </div>
     </section>
   )

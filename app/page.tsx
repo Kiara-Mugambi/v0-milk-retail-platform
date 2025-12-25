@@ -10,8 +10,10 @@ export default function Home() {
 
       <div className="container mx-auto px-4 py-12 space-y-16">
         <MovieGrid title="Trending Now" category="trending" />
-        <MovieGrid title="New Releases" category="new" />
-        <MovieGrid title="Critically Acclaimed" category="top" />
+        <MovieGrid title="Popular Movies" category="popular" />
+        <MovieGrid title="Top Rated Movies" category="top_rated" />
+        <MovieGrid title="Popular TV Shows" category="tv_popular" />
+        <MovieGrid title="Top Rated TV Shows" category="tv_top_rated" />
       </div>
 
       <footer className="border-t border-border mt-24 py-12 bg-background/50 backdrop-blur-md">
