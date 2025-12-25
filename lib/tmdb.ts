@@ -2,14 +2,16 @@ const TMDB_API_KEY = process.env.TMDB_API_KEY
 const TMDB_BASE_URL = "https://api.themoviedb.org/3"
 const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p"
 
+// Hardcoded movie and show data for a perfect "fake" streaming experience
 const MOCK_DATA = {
   trending: [
     {
       id: 1,
       title: "INTERSTELLAR",
-      overview: "The adventures of a group of explorers who make use of a newly discovered wormhole.",
-      backdrop_path: "/cinematic-movie-hero-background-interstellar-style.jpg",
-      poster_path: null,
+      overview:
+        "When Earth becomes uninhabitable, a team of explorers undertakes the most important mission in human history: traveling beyond this galaxy to discover whether mankind has a future among the stars.",
+      backdrop_path: "/batman-dark-knight-backdrop.jpg",
+      poster_path: "/interstellar-inspired-poster.png",
       release_date: "2014-11-07",
       vote_average: 8.7,
       genre_ids: [18, 878, 12],
@@ -17,76 +19,159 @@ const MOCK_DATA = {
     {
       id: 2,
       title: "THE DARK KNIGHT",
-      overview: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham.",
-      backdrop_path: null,
-      poster_path: null,
+      overview:
+        "Batman raises the stakes in his war on crime. With the help of Lt. Jim Gordon and District Attorney Harvey Dent, Batman sets out to dismantle the remaining criminal organizations that plague the streets.",
+      backdrop_path: "/oppenheimer-backdrop.jpg",
+      poster_path: "/dark-knight-inspired-poster.png",
       release_date: "2008-07-18",
       vote_average: 9.0,
       genre_ids: [18, 28, 80],
     },
+    {
+      id: 3,
+      title: "INCEPTION",
+      overview:
+        "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
+      backdrop_path: "/inception-backdrop.jpg",
+      poster_path: "/inception-inspired-poster.png",
+      release_date: "2010-07-16",
+      vote_average: 8.8,
+      genre_ids: [28, 878, 12],
+    },
   ],
-  movies: [
+  popular_movies: [
     {
       id: 101,
-      title: "INCEPTION",
-      release_date: "2010",
-      vote_average: 8.8,
-      overview: "A thief who steals corporate secrets...",
-      poster_path: null,
-      backdrop_path: null,
-      genre_ids: [],
+      title: "OPPENHEIMER",
+      release_date: "2023-07-21",
+      vote_average: 8.5,
+      overview:
+        "The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb.",
+      poster_path: "/oppenheimer-poster.jpg",
+      backdrop_path: "/oppenheimer-backdrop.jpg",
+      genre_ids: [18, 36],
     },
     {
       id: 102,
-      title: "OPPENHEIMER",
-      release_date: "2023",
-      vote_average: 8.5,
-      overview: "The story of American scientist J. Robert Oppenheimer...",
-      poster_path: null,
-      backdrop_path: null,
-      genre_ids: [],
+      title: "DUNE: PART TWO",
+      release_date: "2024-03-01",
+      vote_average: 8.9,
+      overview:
+        "Paul Atreides unites with Chani and the Fremen while on a warpath of revenge against the conspirators who destroyed his family.",
+      poster_path: "/dune-2-poster.jpg",
+      backdrop_path: "/dune-2-backdrop.jpg",
+      genre_ids: [28, 12, 878],
     },
     {
       id: 103,
-      title: "DUNE: PART TWO",
-      release_date: "2024",
-      vote_average: 8.9,
-      overview: "Paul Atreides unites with Chani...",
-      poster_path: null,
-      backdrop_path: null,
-      genre_ids: [],
+      title: "BLADE RUNNER 2049",
+      release_date: "2017-10-06",
+      vote_average: 8.3,
+      overview:
+        "All unemployed, Ki-taek's family takes peculiar interest in the wealthy and glamorous Parks for their livelihood until they get entangled in an unexpected incident.",
+      poster_path: "/blade-runner-2049-poster.jpg",
+      backdrop_path: "/blade-runner-2049-backdrop.jpg",
+      genre_ids: [18, 878],
     },
     {
       id: 104,
-      title: "THE MATRIX",
-      release_date: "1999",
-      vote_average: 8.7,
-      overview: "A computer hacker learns from mysterious rebels...",
-      poster_path: null,
-      backdrop_path: null,
-      genre_ids: [],
+      title: "PARASITE",
+      release_date: "2019-05-30",
+      vote_average: 8.5,
+      overview:
+        "All unemployed, Ki-taek's family takes peculiar interest in the wealthy and glamorous Parks for their livelihood until they get entangled in an unexpected incident.",
+      poster_path: "/parasite-poster.jpg",
+      backdrop_path: "/parasite-backdrop.jpg",
+      genre_ids: [35, 18, 53],
+    },
+    {
+      id: 105,
+      title: "TENET",
+      release_date: "2020-08-26",
+      vote_average: 7.2,
+      overview:
+        "Armed with only one word, Tenet, and fighting for the survival of the entire world, a Protagonist journeys through a twilight world of international espionage.",
+      poster_path: "/tenet-poster.jpg",
+      backdrop_path: "/tenet-backdrop.jpg",
+      genre_ids: [28, 878, 53],
+    },
+    {
+      id: 106,
+      title: "THE PRESTIGE",
+      release_date: "2006-10-19",
+      vote_average: 8.2,
+      overview:
+        "After a tragic accident, two stage magicians engage in a battle to create the ultimate illusion while sacrificing everything they have to outwit each other.",
+      poster_path: "/the-prestige-poster.jpg",
+      backdrop_path: "/the-prestige-backdrop.jpg",
+      genre_ids: [18, 9648, 53],
     },
   ],
-  tv: [
+  popular_tv: [
     {
       id: 201,
       name: "SUCCESSION",
-      first_air_date: "2018",
+      first_air_date: "2018-06-03",
       vote_average: 8.9,
-      overview: "The Roy family is known for controlling the biggest media company...",
-      poster_path: null,
-      backdrop_path: null,
-      genre_ids: [],
+      overview:
+        "The Roy family is known for controlling the biggest media and entertainment company in the world. However, their world changes when their father steps down from the company.",
+      poster_path: "/succession-poster.jpg",
+      backdrop_path: "/succession-backdrop.jpg",
+      genre_ids: [18],
     },
     {
       id: 202,
       name: "THE BEAR",
-      first_air_date: "2022",
+      first_air_date: "2022-06-23",
       vote_average: 8.6,
-      overview: "A young chef from the fine dining world...",
-      poster_path: null,
-      backdrop_path: null,
-      genre_ids: [],
+      overview:
+        "A young chef from the fine dining world comes home to Chicago to run his family sandwich shop after a heartbreaking death in his family.",
+      poster_path: "/the-bear-poster.jpg",
+      backdrop_path: "/the-bear-backdrop.jpg",
+      genre_ids: [18, 35],
+    },
+    {
+      id: 203,
+      name: "DARK",
+      first_air_date: "2017-12-01",
+      vote_average: 8.4,
+      overview:
+        "A family saga with a supernatural twist, set in a German town, where the disappearance of two young children exposes the relationships among four families.",
+      poster_path: "/dark-series-poster.jpg",
+      backdrop_path: "/dark-series-backdrop.jpg",
+      genre_ids: [18, 9648, 878],
+    },
+    {
+      id: 204,
+      name: "THE LAST OF US",
+      first_air_date: "2023-01-15",
+      vote_average: 8.7,
+      overview:
+        "After a global pandemic destroys civilization, a hardened survivor takes charge of a 14-year-old girl who may be humanity's last hope.",
+      poster_path: "/the-last-of-us-poster.jpg",
+      backdrop_path: "/the-last-of-us-backdrop.jpg",
+      genre_ids: [18, 10759, 10765],
+    },
+    {
+      id: 205,
+      name: "SHOGUN",
+      first_air_date: "2024-02-27",
+      vote_average: 8.8,
+      overview:
+        "In Japan in the year 1600, Lord Yoshii Toranaga is fighting for his life as his enemies on the Council of Regents unite against him.",
+      poster_path: "/shogun-poster.jpg",
+      backdrop_path: "/shogun-backdrop.jpg",
+      genre_ids: [18, 10759],
+    },
+    {
+      id: 206,
+      name: "THE BOYS",
+      first_air_date: "2019-07-26",
+      vote_average: 8.5,
+      overview: "A group of vigilantes set out to take down corrupt superheroes who abuse their superpowers.",
+      poster_path: "/placeholder.svg?height=600&width=400",
+      backdrop_path: "/placeholder.svg?height=1080&width=1920",
+      genre_ids: [10759, 10765],
     },
   ],
 }
@@ -117,116 +202,43 @@ export type MediaItem = Movie | TVShow
 
 export function getImageUrl(path: string | null, size: "w500" | "original" = "w500"): string {
   if (!path) return "/placeholder.svg?height=600&width=400"
+  // If it's a placeholder or local file, return as is
+  if (path.startsWith("/") || path.startsWith("http")) return path
   return `${TMDB_IMAGE_BASE_URL}/${size}${path}`
 }
 
 export async function fetchTrending(mediaType: "movie" | "tv" = "movie"): Promise<MediaItem[]> {
-  if (!TMDB_API_KEY) {
-    return mediaType === "movie" ? (MOCK_DATA.trending as any) : (MOCK_DATA.tv as any)
-  }
-
-  try {
-    const response = await fetch(`${TMDB_BASE_URL}/trending/${mediaType}/week?api_key=${TMDB_API_KEY}`, {
-      next: { revalidate: 3600 },
-    })
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}))
-      console.error(`[v0] TMDB API error (${response.status}):`, errorData.status_message || response.statusText)
-      return []
-    }
-
-    const data = await response.json()
-    return data.results || []
-  } catch (error) {
-    console.error("[v0] Error fetching trending:", error)
-    return []
-  }
+  return mediaType === "movie" ? (MOCK_DATA.trending as any) : (MOCK_DATA.popular_tv as any)
 }
 
 export async function fetchMoviesByCategory(category: "popular" | "top_rated" | "upcoming"): Promise<Movie[]> {
-  if (!TMDB_API_KEY) {
-    console.error("[v0] TMDB_API_KEY is not defined.")
-    return []
-  }
-
-  try {
-    const response = await fetch(`${TMDB_BASE_URL}/movie/${category}?api_key=${TMDB_API_KEY}`, {
-      next: { revalidate: 3600 },
-    })
-
-    if (!response.ok) {
-      console.error(`[v0] TMDB API error (${response.status}) fetching ${category} movies`)
-      return []
-    }
-
-    const data = await response.json()
-    return data.results || []
-  } catch (error) {
-    console.error(`[v0] Error fetching ${category} movies:`, error)
-    return []
-  }
+  return MOCK_DATA.popular_movies as any
 }
 
 export async function fetchTVShows(category: "popular" | "top_rated" | "on_the_air"): Promise<TVShow[]> {
-  if (!TMDB_API_KEY) {
-    console.error("[v0] TMDB_API_KEY is not defined.")
-    return []
-  }
-
-  try {
-    const response = await fetch(`${TMDB_BASE_URL}/tv/${category}?api_key=${TMDB_API_KEY}`, {
-      next: { revalidate: 3600 },
-    })
-
-    if (!response.ok) {
-      console.error(`[v0] TMDB API error (${response.status}) fetching ${category} TV shows`)
-      return []
-    }
-
-    const data = await response.json()
-    return data.results || []
-  } catch (error) {
-    console.error(`[v0] Error fetching ${category} TV shows:`, error)
-    return []
-  }
+  return MOCK_DATA.popular_tv as any
 }
 
 export async function searchMedia(query: string, mediaType: "movie" | "tv" | "multi" = "multi"): Promise<MediaItem[]> {
-  try {
-    const response = await fetch(
-      `${TMDB_BASE_URL}/search/${mediaType}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}`,
-      { next: { revalidate: 3600 } },
-    )
-    const data = await response.json()
-    return data.results || []
-  } catch (error) {
-    console.error("Error searching media:", error)
-    return []
-  }
+  const allItems = [...MOCK_DATA.trending, ...MOCK_DATA.popular_movies, ...MOCK_DATA.popular_tv]
+  return allItems.filter((item: any) => (item.title || item.name).toLowerCase().includes(query.toLowerCase())) as any
 }
 
 export async function getMediaDetails(id: number, mediaType: "movie" | "tv") {
-  if (!TMDB_API_KEY) {
-    console.error("[v0] TMDB_API_KEY is not defined.")
-    return null
-  }
+  const allItems = [...MOCK_DATA.trending, ...MOCK_DATA.popular_movies, ...MOCK_DATA.popular_tv]
+  const item = allItems.find((i) => i.id === id)
+  if (!item) return null
 
-  try {
-    const response = await fetch(
-      `${TMDB_BASE_URL}/${mediaType}/${id}?api_key=${TMDB_API_KEY}&append_to_response=videos,credits`,
-      { next: { revalidate: 3600 } },
-    )
-
-    if (!response.ok) {
-      console.error(`[v0] TMDB API error (${response.status}) fetching details for ${mediaType} ${id}`)
-      return null
-    }
-
-    return await response.json()
-  } catch (error) {
-    console.error("[v0] Error fetching media details:", error)
-    return null
+  // Add dummy videos and credits for the watch page
+  return {
+    ...item,
+    videos: { results: [{ key: "dQw4w9WgXcQ", site: "YouTube", type: "Trailer" }] },
+    credits: {
+      cast: [
+        { name: "Actor One", character: "Character One" },
+        { name: "Actor Two", character: "Character Two" },
+      ],
+    },
   }
 }
 
