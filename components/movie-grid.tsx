@@ -19,25 +19,40 @@ interface MovieGridProps {
 export async function MovieGrid({ title, category }: MovieGridProps) {
   let items: MediaItem[] = []
 
-  switch (category) {
-    case "trending":
-      items = await fetchTrending("movie")
-      break
-    case "popular":
-      items = await fetchMoviesByCategory("popular")
-      break
-    case "top_rated":
-      items = await fetchMoviesByCategory("top_rated")
-      break
-    case "upcoming":
-      items = await fetchMoviesByCategory("upcoming")
-      break
-    case "tv_popular":
-      items = await fetchTVShows("popular")
-      break
-    case "tv_top_rated":
-      items = await fetchTVShows("top_rated")
-      break
+  try {
+    switch (category) {
+      case "trending":
+        items = await fetchTrending("movie")
+        break
+      case "popular":
+        items = await fetchMoviesByCategory("popular")
+        break
+      case "top_rated":
+        items = await fetchMoviesByCategory("top_rated")
+        break
+      case "upcoming":
+        items = await fetchMoviesByCategory("upcoming")
+        break
+      case "tv_popular":
+        items = await fetchTVShows("popular")
+        break
+      case "tv_top_rated":
+        items = await fetchTVShows("top_rated")
+        break
+    }
+  } catch (error) {
+    console.error(`[v0] MovieGrid failed to fetch ${category}:`, error)
+  }
+
+  if (!items || items.length === 0) {
+    return (
+      <section className="space-y-6">
+        <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
+        <div className="h-40 flex items-center justify-center rounded-lg border border-dashed border-white/10 bg-muted/5">
+          <p className="text-sm text-muted-foreground">No data available. Please check your TMDB_API_KEY.</p>
+        </div>
+      </section>
+    )
   }
 
   const displayItems = items.slice(0, 6)

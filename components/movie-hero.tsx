@@ -4,8 +4,14 @@ import { fetchTrending, getImageUrl, getTitle, isMovie } from "@/lib/tmdb"
 import Link from "next/link"
 
 export async function MovieHero() {
-  const trending = await fetchTrending("movie")
-  const featuredMovie = trending[0]
+  let trending: any[] = []
+  try {
+    trending = await fetchTrending("movie")
+  } catch (error) {
+    console.error("[v0] MovieHero failed to fetch trending:", error)
+  }
+
+  const featuredMovie = trending && trending.length > 0 ? trending[0] : null
 
   if (!featuredMovie) {
     return null
