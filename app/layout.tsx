@@ -1,16 +1,16 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter, JetBrains_Mono } from "next/font/google"
+import { Inter, JetBrains_Mono, Playfair_Display } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] })
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif" })
 
 export const metadata: Metadata = {
-  title: "Premier League Match Predictor - Analytics & Predictions",
-  description:
-    "Predict Premier League match outcomes using real-time player statistics, advanced analytics, and AI-powered win probability calculations",
+  title: "CineStream | SanaTech Solutions",
+  description: "Immersive cinematic streaming experience.",
   generator: "v0.app",
   icons: {
     icon: [
@@ -38,7 +38,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased bg-background text-foreground`}>
+      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-background text-foreground`}>
         {children}
         <Analytics />
       </body>

@@ -1,4 +1,4 @@
-import { Play, Info, Plus } from "lucide-react"
+import { Play, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { fetchTrending, getImageUrl, getTitle, isMovie } from "@/lib/tmdb"
 import Link from "next/link"
@@ -13,79 +13,67 @@ export async function MovieHero() {
 
   const featuredMovie = trending && trending.length > 0 ? trending[0] : null
 
-  if (!featuredMovie) {
-    return null
-  }
+  if (!featuredMovie) return null
 
   const title = getTitle(featuredMovie)
-  const overview = featuredMovie.overview
   const backdropUrl = getImageUrl(featuredMovie.backdrop_path, "original")
-  const rating = featuredMovie.vote_average.toFixed(1)
   const year = isMovie(featuredMovie)
     ? featuredMovie.release_date?.split("-")[0]
     : featuredMovie.first_air_date?.split("-")[0]
 
   return (
-    <section className="relative h-[85vh] w-full overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center transition-transform duration-10000 hover:scale-105"
-        style={{
-          backgroundImage: `url('${backdropUrl}')`,
-        }}
-      />
-
-      {/* Gradient Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
-
-      <div className="relative container mx-auto px-4 h-full flex flex-col justify-center max-w-2xl">
-        <div className="space-y-6 animate-in fade-in slide-in-from-left-8 duration-700">
-          <div className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-white/50">
-            <span className="px-2 py-1 bg-white/10 rounded border border-white/10">⭐ {rating}</span>
-            <span>{year}</span>
-            <span className="px-2 py-1 bg-white/10 rounded border border-white/10">Featured</span>
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-black tracking-tighter leading-none text-balance uppercase">
-            {title}
+    <section className="relative min-h-screen w-full flex flex-col md:flex-row items-center border-b border-white/10 overflow-hidden">
+      <div className="flex-1 w-full h-full p-8 md:p-20 flex flex-col justify-center gap-12 z-10">
+        <div className="space-y-2 animate-in fade-in slide-in-from-left-8 duration-1000">
+          <p className="text-xs uppercase tracking-[0.4em] font-medium text-white/40">featured premiere • {year}</p>
+          <h1 className="text-7xl md:text-[10rem] font-serif font-light tracking-tighter leading-[0.85] text-white">
+            {title.split(" ")[0]}
+            <br />
+            <span className="opacity-40 italic">{title.split(" ").slice(1).join(" ")}</span>
           </h1>
+        </div>
 
-          <p className="text-lg text-muted-foreground leading-relaxed text-pretty line-clamp-3">{overview}</p>
-
-          <div className="flex flex-wrap items-center gap-4 pt-4">
-            <Link href={`/watch/${isMovie(featuredMovie) ? "movie" : "tv"}/${featuredMovie.id}`}>
-              <Button
-                size="lg"
-                className="h-12 px-8 rounded-md font-bold text-base bg-white text-black hover:bg-white/90"
-              >
-                <Play className="mr-2 h-5 w-5 fill-current" />
-                Watch Now
-              </Button>
-            </Link>
-            <Link href={`/watch/${isMovie(featuredMovie) ? "movie" : "tv"}/${featuredMovie.id}`}>
-              <Button
-                size="lg"
-                variant="outline"
-                className="h-12 px-8 rounded-md font-bold text-base border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10"
-              >
-                <Info className="mr-2 h-5 w-5" />
-                More Info
-              </Button>
-            </Link>
-            <Button
-              size="icon"
-              variant="outline"
-              className="h-12 w-12 rounded-md border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10"
-            >
-              <Plus className="h-5 w-5" />
-              <span className="sr-only">Add to watchlist</span>
+        <div className="flex items-center gap-8 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
+          <Link href={`/watch/${isMovie(featuredMovie) ? "movie" : "tv"}/${featuredMovie.id}`}>
+            <Button className="h-16 px-12 rounded-full font-bold text-lg bg-white text-black hover:bg-white/90 transition-all hover:scale-105">
+              <Play className="mr-3 h-6 w-6 fill-current" />
+              Play Now
             </Button>
-          </div>
+          </Link>
+          <Button
+            variant="ghost"
+            className="group flex items-center gap-4 text-white/60 hover:text-white transition-colors"
+          >
+            <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:border-white transition-colors">
+              <Plus className="w-5 h-5" />
+            </div>
+            <span className="text-sm font-medium uppercase tracking-widest">Add to list</span>
+          </Button>
         </div>
       </div>
 
-      {/* Bottom accent border inspired by Vercel grid lines */}
-      <div className="absolute bottom-0 left-0 w-full h-px bg-white/10" />
+      <div className="flex-1 w-full h-[50vh] md:h-full relative overflow-hidden group">
+        <img
+          src={backdropUrl || "/placeholder.svg"}
+          alt={title}
+          className="absolute inset-0 w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-[3000ms] ease-out"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent hidden md:block" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent md:hidden" />
+      </div>
+
+      {/* Side navigation items inspired by Gamma/Next.js */}
+      <div className="absolute left-8 bottom-20 hidden lg:flex flex-col gap-8 text-[10px] uppercase tracking-[0.4em] text-white/30 font-bold">
+        <span className="hover:text-white cursor-pointer transition-colors [writing-mode:vertical-lr] rotate-180">
+          Instagram
+        </span>
+        <span className="hover:text-white cursor-pointer transition-colors [writing-mode:vertical-lr] rotate-180">
+          Twitter
+        </span>
+        <span className="hover:text-white cursor-pointer transition-colors [writing-mode:vertical-lr] rotate-180">
+          Vimeo
+        </span>
+      </div>
     </section>
   )
 }
