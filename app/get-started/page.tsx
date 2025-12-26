@@ -60,9 +60,9 @@ export default function GetStarted() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">D</span>
+                <span className="text-white font-bold text-lg">W</span>
               </div>
-              <h1 className="text-2xl font-bold text-foreground">DairySight</h1>
+              <h1 className="text-2xl font-bold text-foreground">Wantime Cinema</h1>
             </div>
             <p className="text-sm text-muted-foreground italic">Track. Analyze. Optimize.</p>
           </div>
@@ -73,12 +73,12 @@ export default function GetStarted() {
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
-            Manage Your Milk Retail Business
+            Manage Your Cinema Business
             <span className="text-primary"> Smarter</span>
           </h2>
           <p className="text-xl text-muted-foreground mb-8">
-            DairySight integrates with your IoT-enabled milk vending machines to help you track sales, monitor device
-            health, and ensure product integrity in real-time.
+            Wantime Cinema provides the ultimate platform to track movie sales, monitor theater health, and analyze
+            viewer patterns in real-time.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/">
@@ -130,7 +130,7 @@ export default function GetStarted() {
       {/* Benefits Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-4xl mx-auto">
-          <h3 className="text-3xl font-bold text-foreground text-center mb-12">Why Choose DairySight?</h3>
+          <h3 className="text-3xl font-bold text-foreground text-center mb-12">Why Choose Wantime Cinema?</h3>
           <div className="space-y-4">
             {[
               "Increase sales with data-driven insights about customer buying patterns",
@@ -153,7 +153,7 @@ export default function GetStarted() {
         <div className="max-w-2xl mx-auto bg-primary rounded-lg p-12 text-center text-white">
           <h3 className="text-3xl font-bold mb-4">Ready to Get Started?</h3>
           <p className="text-lg mb-8 opacity-90">
-            Join milk retailers across Kenya who are already using DairySight to grow their business.
+            Join cinema operators who are already using Wantime Cinema to grow their business.
           </p>
           <Link href="/">
             <Button size="lg" className="bg-white text-primary hover:bg-gray-100">
@@ -166,7 +166,7 @@ export default function GetStarted() {
       {/* Footer */}
       <footer className="border-t border-border py-8 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="max-w-6xl mx-auto text-center text-muted-foreground text-sm">
-          <p>&copy; 2025 DairySight. All rights reserved. Track. Analyze. Optimize.</p>
+          <p>&copy; 2025 Wantime Cinema. All rights reserved. Track. Analyze. Optimize.</p>
         </div>
       </footer>
     </div>

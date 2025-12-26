@@ -60,7 +60,7 @@ export function Sidebar({ open, onOpenChange }: SidebarProps) {
       }`}
     >
       <div className="h-16 border-b border-sidebar-border flex items-center justify-between px-4">
-        {open && <h1 className="text-lg font-bold text-sidebar-primary">DairySight</h1>}
+        {open && <h1 className="text-lg font-bold text-sidebar-primary">Wantime Cinema</h1>}
         <Button
           variant="ghost"
           size="sm"
@@ -115,7 +115,7 @@ export function Sidebar({ open, onOpenChange }: SidebarProps) {
 
       {/* Footer */}
       <div className="border-t border-sidebar-border p-4">
-        {open && <p className="text-xs text-sidebar-foreground mb-3">John's Milk Shop</p>}
+        {open && <p className="text-xs text-sidebar-foreground mb-3">Cinema Management</p>}
         <Button
           variant="ghost"
           className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"

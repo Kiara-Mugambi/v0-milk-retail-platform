@@ -104,10 +104,10 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
             <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">D</span>
+              <span className="text-white font-bold text-xl">W</span>
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">DairySight</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Wantime Cinema</h1>
           <p className="text-muted-foreground text-sm italic">Track. Analyze. Optimize.</p>
         </div>
 
@@ -135,7 +135,7 @@ export default function LoginPage() {
                       <FormLabel className="text-foreground">Business Name</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Your milk shop name"
+                          placeholder="Your cinema name"
                           {...field}
                           className="bg-input border-border"
                           disabled={isLoading}
@@ -300,7 +300,7 @@ export default function LoginPage() {
             href="/get-started"
             className="text-sm text-primary hover:text-primary/80 font-medium transition-colors"
           >
-            Learn more about DairySight
+            Learn more about Wantime Cinema
           </Link>
         </div>
       </div>
