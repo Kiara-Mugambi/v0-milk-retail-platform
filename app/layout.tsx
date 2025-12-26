@@ -9,7 +9,7 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] })
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif" })
 
 export const metadata: Metadata = {
-  title: "CineStream | SanaTech Solutions",
+  title: "Wantime Cinema | SanaTech Solutions",
   description: "Immersive cinematic streaming experience.",
   generator: "v0.app",
   icons: {

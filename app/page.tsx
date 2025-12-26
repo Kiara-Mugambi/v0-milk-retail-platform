@@ -20,9 +20,8 @@ export default function Home() {
         <div className="container mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-12">
           <div className="flex flex-col gap-4">
             <span className="font-serif text-3xl tracking-tighter">
-              <span className="text-gradient-blue">Dairy</span>
-              <span className="text-gradient-green">Sight</span>
-              <span className="text-xs uppercase tracking-widest text-muted-foreground ml-2">Cinema</span>
+              <span className="text-gradient-blue">Wantime</span>
+              <span className="text-gradient-green ml-2">Cinema</span>
             </span>
             <p className="text-white/30 text-xs tracking-[0.3em] uppercase">Experience True Cinema.</p>
           </div>

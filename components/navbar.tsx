@@ -15,9 +15,8 @@ export function Navbar() {
 
       <div className="absolute left-1/2 -translate-x-1/2 pointer-events-auto">
         <Link href="/" className="font-serif text-2xl tracking-tighter hover:opacity-70 transition-opacity">
-          <span className="text-gradient-blue">Dairy</span>
-          <span className="text-gradient-green">Sight</span>
-          <span className="text-xs uppercase tracking-widest text-muted-foreground ml-2">Cinema</span>
+          <span className="text-gradient-blue">Wantime</span>
+          <span className="text-gradient-green ml-2">Cinema</span>
         </Link>
       </div>
 
