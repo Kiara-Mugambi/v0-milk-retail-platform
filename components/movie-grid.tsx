@@ -9,10 +9,22 @@ import {
   isMovie,
   type MediaItem,
 } from "@/lib/tmdb"
+import { Star } from "lucide-react"
 
 interface MovieGridProps {
   title: string
-  category: "trending" | "popular" | "top_rated" | "upcoming" | "tv_popular" | "tv_top_rated" | "2025_premieres"
+  category:
+    | "trending"
+    | "popular"
+    | "top_rated"
+    | "upcoming"
+    | "tv_popular"
+    | "tv_top_rated"
+    | "2025_premieres"
+    | "comedy"
+    | "crime"
+    | "fantasy"
+    | "scifi"
 }
 
 export async function MovieGrid({ title, category }: MovieGridProps) {
@@ -64,48 +76,57 @@ export async function MovieGrid({ title, category }: MovieGridProps) {
 
   return (
     <section className="group/section space-y-16">
-      <div className="flex items-end justify-between border-b border-white/5 pb-8">
+      <div className="flex items-end justify-between border-b border-primary/10 pb-8">
         <div className="space-y-4">
-          <p className="text-[11px] uppercase tracking-[0.5em] text-accent font-bold animate-pulse">2025 Premieres</p>
-          <h2 className="text-5xl md:text-7xl font-serif font-light tracking-tighter italic hover:not-italic transition-all duration-700 cursor-default">
+          <p className="text-[11px] uppercase tracking-[0.5em] text-primary font-bold">2025 Premieres</p>
+          <h2 className="text-5xl md:text-7xl font-serif font-light tracking-tighter hover:text-primary transition-all duration-700 cursor-default">
             {title}
           </h2>
         </div>
-        <div className="hidden md:block h-px flex-1 bg-white/5 mx-20" />
+        <div className="hidden md:block h-px flex-1 bg-gradient-to-r from-primary/20 via-secondary/20 to-transparent mx-20" />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-x-2 gap-y-24">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
         {displayItems.map((item) => {
           const mediaType = isMovie(item) ? "movie" : "tv"
           const itemTitle = getTitle(item)
           const year = getReleaseYear(item)
           const posterUrl = getImageUrl(item.poster_path)
+          const rating = item.vote_average.toFixed(1)
 
           return (
             <Link key={item.id} href={`/watch/${mediaType}/${item.id}`} className="group relative overflow-hidden">
-              <div className="flex flex-col md:flex-row gap-8 items-center md:items-start group">
-                <div className="relative aspect-[3/4] w-full md:w-64 flex-shrink-0 overflow-hidden bg-white/5 ring-1 ring-white/10 transition-all duration-700 group-hover:ring-accent/50 group-hover:shadow-[0_0_40px_rgba(225,29,72,0.1)]">
+              <div className="flex flex-col gap-6 items-start group">
+                <div className="relative aspect-[2/3] w-full flex-shrink-0 overflow-hidden rounded-lg bg-card ring-1 ring-border transition-all duration-700 group-hover:ring-primary/50 group-hover:shadow-[0_0_60px_rgba(241,196,15,0.15)] gradient-glow">
                   <img
                     src={posterUrl || "/placeholder.svg"}
                     alt={itemTitle}
-                    className="object-cover w-full h-full grayscale group-hover:grayscale-0 scale-100 group-hover:scale-110 transition-all duration-[1.5s] ease-out"
+                    className="object-cover w-full h-full scale-100 group-hover:scale-110 transition-all duration-[1.5s] ease-out"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+
+                  <div className="absolute top-4 right-4 glass px-3 py-2 rounded-full flex items-center gap-2">
+                    <Star className="w-4 h-4 fill-primary text-primary" />
+                    <span className="text-sm font-bold text-white">{rating}</span>
+                  </div>
+
+                  <div className="absolute bottom-4 left-4 glass-dark px-4 py-2 rounded-full">
+                    <span className="text-xs uppercase tracking-wider text-white/80">{year}</span>
+                  </div>
                 </div>
 
-                <div className="flex-1 space-y-6 text-center md:text-left py-4">
+                <div className="flex-1 space-y-4 text-left">
                   <div className="space-y-2">
-                    <p className="text-[10px] uppercase tracking-[0.3em] text-white/40">{year} • Premiere</p>
-                    <h3 className="text-2xl md:text-4xl font-serif font-light tracking-tight text-white group-hover:text-accent transition-colors duration-500 italic">
+                    <h3 className="text-2xl md:text-3xl font-serif font-light tracking-tight text-foreground group-hover:text-primary transition-colors duration-500">
                       {itemTitle}
                     </h3>
                   </div>
-                  <p className="text-sm text-white/50 leading-relaxed max-w-md font-light line-clamp-3 group-hover:text-white/80 transition-colors duration-500">
+                  <p className="text-sm text-muted-foreground leading-relaxed font-light line-clamp-2 group-hover:text-foreground transition-colors duration-500">
                     {item.overview}
                   </p>
-                  <div className="pt-4 opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0">
-                    <span className="text-[11px] uppercase tracking-[0.4em] font-bold border-b border-accent pb-1">
-                      Explore Details
+                  <div className="pt-2 opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0">
+                    <span className="text-[11px] uppercase tracking-[0.4em] font-bold text-secondary border-b border-secondary pb-1">
+                      Watch Now
                     </span>
                   </div>
                 </div>
