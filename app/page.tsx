@@ -4,17 +4,19 @@ import { Navbar } from "@/components/navbar"
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background relative grid-pattern">
+      <div className="film-grain" />
       <Navbar />
       <MovieHero />
 
-      <div className="container mx-auto px-8 py-24 space-y-32">
-        <MovieGrid title="Latest Stories" category="trending" />
-        <MovieGrid title="Cinematic Choice" category="popular" />
-        <MovieGrid title="Serial Drama" category="tv_popular" />
+      <div className="container mx-auto px-8 py-32 space-y-48">
+        <MovieGrid title="Comedy Premieres" category="comedy" />
+        <MovieGrid title="Crime & Intrigue" category="crime" />
+        <MovieGrid title="Fantasy Realms" category="fantasy" />
+        <MovieGrid title="Future Visions" category="scifi" />
       </div>
 
-      <footer className="border-t border-white/5 py-32 bg-black">
+      <footer className="border-t border-white/5 py-32 bg-black relative z-10">
         <div className="container mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-12">
           <div className="flex flex-col gap-4">
             <span className="font-serif text-3xl tracking-tighter">cinestream.</span>
@@ -27,7 +29,7 @@ export default function Home() {
               <span className="hover:text-white cursor-pointer transition-colors">Terms</span>
               <span className="hover:text-white cursor-pointer transition-colors">Support</span>
             </div>
-            <p className="text-[10px] text-white/20 uppercase tracking-[0.5em] font-medium">
+            <p className="text-[10px] text-white/40 uppercase tracking-[0.6em] font-bold">
               All rights reserved by SanaTech Solutions. © 2025
             </p>
           </div>
